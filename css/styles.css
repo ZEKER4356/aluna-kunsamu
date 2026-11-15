@@ -1,0 +1,1581 @@
+/**
+ * ============================================================================
+ * KUNSAMU · ALUNA IA: SISTEMA DE DISENO VISUAL INTERCULTURAL
+ * ============================================================================
+ * Estetica organica de la Sierra Nevada de Santa Marta (Pueblo Arhuaco / Iku).
+ * Paleta natural: Verde bosque (#1E5641), hoja (#27765B), menta (#E0F3DC),
+ * algodon crudo (#F7F5EE), dorado ocre (#D99B38) y cafe tierra (#8C5A32).
+ * Cero degradados rojo-verde. Cero emojis.
+ * ============================================================================
+ */
+
+:root {
+  /* Paleta Base Primaria (Sierra Nevada) */
+  --primary-forest: #1E5641;
+  --primary-leaf: #27765B;
+  --primary-deep: #16463E;
+  --primary-soft: #E0F3DC;
+  --primary-mint: #CBEAD2;
+
+  /* Acentos Calidos (Tierra y Tejido) */
+  --accent-ochre: #D99B38;
+  --accent-ochre-light: #FCEFD5;
+  --accent-ochre-dark: #A57224;
+  --accent-earth: #8C5A32;
+  --accent-earth-soft: #F2E7DC;
+
+  /* Fondos y Superficies Neutras */
+  --bg-cotton: #F7F5EE;
+  --bg-card: #FFFFFF;
+  --bg-canvas: #FAF8F2;
+  --bg-hover: #EEF5ED;
+
+  /* Textos y Trazos */
+  --text-main: #1C332B;
+  --text-muted: #536E62;
+  --text-inverted: #FFFFFF;
+  --border-light: #DCE8DF;
+  --border-medium: #C3D9C9;
+  --border-shadow: #184433;
+
+  /* Estados Funcionales */
+  --status-success: #27765B;
+  --status-success-bg: #E6F7EA;
+  --status-error: #B74236;
+  --status-error-bg: #FBEAE8;
+  --status-gold: #D99B38;
+  --status-gold-bg: #FEF7E6;
+
+  /* Sombras y Radios */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --radius-full: 9999px;
+  --shadow-sm: 0 2px 6px rgba(30, 86, 65, 0.06);
+  --shadow-md: 0 8px 24px rgba(30, 86, 65, 0.08);
+  --shadow-lg: 0 16px 36px rgba(30, 86, 65, 0.12);
+
+  /* Dimensiones de Navegacion */
+  --sidebar-width: 250px;
+  --topbar-height: 72px;
+  --bottom-nav-height: 68px;
+
+  /* Tipografia */
+  --font-base: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Tema Hermano Menor (Visitante / Aliado): Verde Bosque y Algodon */
+body.theme-visitante {
+  --primary-forest: #1E5641;
+  --primary-leaf: #27765B;
+  --primary-soft: #E0F3DC;
+  --accent-ochre: #D99B38;
+  --border-shadow: #143B2C;
+}
+
+/* Tema Comunidad Iku: Verde Profundo y Tonos Tierra / Ocre */
+body.theme-comunidad {
+  --primary-forest: #1A4736;
+  --primary-leaf: #2B6B48;
+  --primary-soft: #EFE4D6;
+  --accent-ochre: #C88427;
+  --accent-earth: #7A4926;
+  --border-shadow: #123326;
+}
+
+/* Modo Lectura Facil (Accesibilidad para Sabedores y Mayores) */
+body.easy-reading {
+  font-size: 19px !important;
+  line-height: 1.7 !important;
+}
+body.easy-reading p,
+body.easy-reading span,
+body.easy-reading button {
+  letter-spacing: 0.02em;
+}
+
+/* ==========================================================================
+   RESET & ESTILOS BASE
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-base);
+  background-color: var(--bg-cotton);
+  color: var(--text-main);
+  line-height: 1.5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--accent-ochre);
+  outline-offset: 2px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ==========================================================================
+   LAYOUT PRINCIPAL (SIDEBAR DESKTOP + BOTTOM NAV MOBILE)
+   ========================================================================== */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Barra Lateral Fija (Desktop) */
+.sidebar {
+  width: var(--sidebar-width);
+  background-color: var(--primary-deep);
+  color: var(--text-inverted);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  z-index: 40;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  margin-bottom: 20px;
+}
+
+.brand-icon-wrap {
+  width: 44px;
+  height: 44px;
+  background-color: #FFFFFF;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+  padding: 3px;
+}
+
+.brand-title {
+  font-size: 1.28rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #FFFFFF;
+  line-height: 1.1;
+}
+
+.brand-sub {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--primary-soft);
+  display: block;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+/* Lista de 5 Secciones en la Sidebar */
+.nav-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  list-style: none;
+  flex: 1;
+}
+
+.nav-item-btn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  color: #D3E5DB;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-align: left;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-item-btn:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #FFFFFF;
+  transform: translateX(3px);
+}
+
+.nav-item-btn.active {
+  background-color: var(--primary-leaf);
+  color: #FFFFFF;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+/* Pie de la Sidebar con Semillita Miniatura */
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-mascot-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar-mascot-img {
+  width: 36px;
+  height: 42px;
+  flex-shrink: 0;
+}
+
+.sidebar-mascot-text {
+  font-size: 0.76rem;
+  color: var(--primary-soft);
+  line-height: 1.3;
+}
+
+/* Área de Contenido Principal */
+.main-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background-color: var(--bg-cotton);
+}
+
+/* Barra Superior (Topbar) */
+.topbar {
+  height: var(--topbar-height);
+  background-color: var(--bg-card);
+  border-bottom: 1.5px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  box-shadow: var(--shadow-sm);
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.pill-role-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--primary-soft);
+  color: var(--primary-forest);
+  border: 1.5px solid var(--border-medium);
+  padding: 7px 14px;
+  border-radius: var(--radius-full);
+  font-size: 0.84rem;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.pill-role-switch:hover {
+  background-color: #D3ECD0;
+  border-color: var(--primary-forest);
+  transform: translateY(-1px);
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.stat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-canvas);
+  border: 1px solid var(--border-light);
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.stat-pill.points {
+  color: var(--accent-ochre-dark);
+  background: var(--accent-ochre-light);
+  border-color: #F1D49F;
+}
+
+.icon-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background: var(--bg-canvas);
+  border: 1.5px solid var(--border-light);
+  color: var(--text-main);
+  transition: all 0.2s ease;
+}
+
+.icon-action-btn:hover {
+  background: var(--primary-soft);
+  color: var(--primary-forest);
+  border-color: var(--primary-leaf);
+}
+
+.icon-action-btn.active {
+  background: var(--primary-leaf);
+  color: #FFFFFF;
+  border-color: var(--primary-forest);
+}
+
+/* Barra de Navegación Inferior (Móvil) */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--bottom-nav-height);
+  background: var(--bg-card);
+  border-top: 1.5px solid var(--border-light);
+  z-index: 50;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.bottom-nav-list {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: 100%;
+  list-style: none;
+  padding: 0 4px;
+}
+
+.bottom-nav-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  flex: 1;
+  height: 100%;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 4px;
+  transition: all 0.15s ease;
+}
+
+.bottom-nav-btn.active {
+  color: var(--primary-forest);
+  font-weight: 800;
+}
+
+.bottom-nav-btn.active .nav-icon {
+  transform: translateY(-2px);
+  color: var(--primary-forest);
+}
+
+/* Contenido Principal de las Vistas */
+.view-content {
+  flex: 1;
+  max-width: 1080px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 32px 24px 60px;
+}
+
+.app-view {
+  display: none;
+  animation: fadeInView 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.app-view.active {
+  display: block;
+}
+
+@keyframes fadeInView {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   BOTONES TACTILES CON RELIEVE ORGANICO (3.5px)
+   ========================================================================== */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background-color: var(--accent-ochre);
+  color: #382405;
+  font-weight: 800;
+  padding: 13px 24px;
+  border-radius: var(--radius-md);
+  box-shadow: 0 3.5px 0 var(--accent-ochre-dark);
+  transition: all 0.12s cubic-bezier(0.2, 0.8, 0.4, 1);
+  text-align: center;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1.5px);
+  box-shadow: 0 5px 0 var(--accent-ochre-dark);
+}
+
+.btn-primary:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--accent-ochre-dark);
+}
+
+.btn-forest {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background-color: var(--primary-forest);
+  color: #FFFFFF;
+  font-weight: 800;
+  padding: 13px 24px;
+  border-radius: var(--radius-md);
+  box-shadow: 0 3.5px 0 var(--border-shadow);
+  transition: all 0.12s ease;
+}
+
+.btn-forest:hover {
+  background-color: var(--primary-leaf);
+  transform: translateY(-1.5px);
+  box-shadow: 0 5px 0 var(--border-shadow);
+}
+
+.btn-forest:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--border-shadow);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: #FFFFFF;
+  color: var(--primary-forest);
+  font-weight: 700;
+  padding: 11px 20px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border-medium);
+  box-shadow: 0 2px 0 var(--border-medium);
+  transition: all 0.12s ease;
+}
+
+.btn-secondary:hover {
+  background-color: var(--bg-hover);
+  border-color: var(--primary-leaf);
+}
+
+.btn-secondary:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+.btn-sm {
+  padding: 7px 14px;
+  font-size: 0.84rem;
+}
+
+/* ==========================================================================
+   VISTA 1: INICIO (BIENVENIDA, PROGRESO Y SEMILLITA VIVA)
+   ========================================================================== */
+.home-hero-card {
+  background: linear-gradient(135deg, var(--primary-deep) 0%, var(--primary-forest) 65%, #256B52 100%);
+  color: #FFFFFF;
+  border-radius: var(--radius-lg);
+  padding: 36px 32px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  margin-bottom: 28px;
+}
+
+.home-hero-card::after {
+  content: '';
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle, rgba(217, 155, 56, 0.15) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.home-hero-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+}
+
+.home-hero-text {
+  flex: 1;
+  max-width: 580px;
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--primary-soft);
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 12px;
+}
+
+.home-hero-text h1 {
+  font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+  font-weight: 900;
+  line-height: 1.15;
+  margin-bottom: 12px;
+}
+
+.home-hero-text p {
+  font-size: 1.05rem;
+  color: #E2EFE7;
+  line-height: 1.55;
+  margin-bottom: 22px;
+}
+
+.home-mascot-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 140px;
+  flex-shrink: 0;
+}
+
+.mascot-hero-svg-wrap {
+  width: 120px;
+  height: 130px;
+  position: relative;
+}
+
+/* Tarjetas de Métricas de Progreso */
+.stats-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.stat-summary-card {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease;
+}
+
+.stat-summary-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.stat-icon-badge {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stat-icon-badge.green {
+  background: var(--primary-soft);
+  color: var(--primary-forest);
+}
+
+.stat-icon-badge.gold {
+  background: var(--accent-ochre-light);
+  color: var(--accent-ochre-dark);
+}
+
+.stat-icon-badge.earth {
+  background: var(--accent-earth-soft);
+  color: var(--accent-earth);
+}
+
+.stat-number {
+  font-size: 1.6rem;
+  font-weight: 900;
+  line-height: 1.1;
+  color: var(--text-main);
+}
+
+.stat-label {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* Mensaje Contextual de Semillita */
+.mascot-speech-bubble-banner {
+  background: #FFFFFF;
+  border: 1.5px solid var(--border-medium);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 28px;
+}
+
+.bubble-mascot-thumb {
+  width: 60px;
+  height: 65px;
+  flex-shrink: 0;
+}
+
+.bubble-text-content h3 {
+  font-size: 1.05rem;
+  color: var(--primary-forest);
+  margin-bottom: 4px;
+}
+
+.bubble-text-content p {
+  font-size: 0.92rem;
+  color: var(--text-main);
+  line-height: 1.45;
+}
+
+/* ==========================================================================
+   VISTA 2: RUTA EN TEJIDO GEOMETRICO EN ZIGZAG (PISOS DEL SABER)
+   ========================================================================== */
+.route-header {
+  margin-bottom: 24px;
+}
+
+.route-header h2 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--primary-forest);
+}
+
+.route-header p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+/* Contenedor de Piso Territorial */
+.piso-container {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin-bottom: 28px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+}
+
+.piso-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border-light);
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.piso-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.piso-badge {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: var(--primary-soft);
+  color: var(--primary-forest);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.piso-title-wrap h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.piso-ecosystem {
+  font-size: 0.82rem;
+  color: var(--accent-earth);
+  font-weight: 700;
+  display: block;
+}
+
+.piso-progress-pill {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--primary-forest);
+  background: var(--primary-soft);
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+}
+
+/* Tejido Geométrico en Zigzag: SVG de fondo + Grid de Nodos */
+.zigzag-loom-area {
+  position: relative;
+  min-height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 10px;
+}
+
+.zigzag-svg-threads {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.thread-line {
+  stroke: #D0DEC4;
+  stroke-width: 4px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  stroke-dasharray: 6 6;
+  transition: all 0.4s ease;
+}
+
+.thread-line.active {
+  stroke: var(--accent-ochre);
+  stroke-width: 5px;
+  stroke-dasharray: none;
+  filter: drop-shadow(0 2px 4px rgba(217, 155, 56, 0.4));
+}
+
+.zigzag-nodes-grid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  width: 100%;
+}
+
+/* Nodos Romboidales de Nivel */
+.level-node-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Alternancia en Zigzag visual */
+.level-node-wrap:nth-child(2) {
+  transform: translateY(22px);
+}
+.level-node-wrap:nth-child(4) {
+  transform: translateY(22px);
+}
+
+.level-diamond-btn {
+  width: 68px;
+  height: 68px;
+  border-radius: 18px;
+  transform: rotate(45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFFFFF;
+  border: 2.5px solid var(--border-medium);
+  box-shadow: 0 4px 0 var(--border-medium);
+  transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-bottom: 12px;
+}
+
+.diamond-inner-content {
+  transform: rotate(-45deg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.level-diamond-btn:hover:not(:disabled) {
+  transform: rotate(45deg) translateY(-2px);
+  box-shadow: 0 6px 0 var(--border-shadow);
+  border-color: var(--primary-leaf);
+}
+
+.level-diamond-btn:active:not(:disabled) {
+  transform: rotate(45deg) translateY(2px);
+  box-shadow: 0 1px 0 var(--border-shadow);
+}
+
+/* Estados de los Nodos */
+.level-diamond-btn.completed {
+  background: var(--primary-forest);
+  border-color: #16463E;
+  box-shadow: 0 4px 0 #123326;
+  color: #FFFFFF;
+}
+
+.level-diamond-btn.current {
+  background: var(--accent-ochre);
+  border-color: var(--accent-ochre-dark);
+  box-shadow: 0 4px 0 var(--accent-ochre-dark);
+  color: #FFFFFF;
+  animation: pulseCurrentNode 2.2s infinite;
+}
+
+.level-diamond-btn.locked {
+  background: #E8ECE8;
+  border-color: #D3DDD3;
+  box-shadow: 0 2px 0 #CBD5CB;
+  color: #92A398;
+  cursor: not-allowed;
+  opacity: 0.75;
+}
+
+@keyframes pulseCurrentNode {
+  0%, 100% { box-shadow: 0 4px 0 var(--accent-ochre-dark), 0 0 0 0 rgba(217, 155, 56, 0.5); }
+  50% { box-shadow: 0 4px 0 var(--accent-ochre-dark), 0 0 0 10px rgba(217, 155, 56, 0); }
+}
+
+.level-node-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-main);
+  max-width: 110px;
+  line-height: 1.25;
+}
+
+/* ==========================================================================
+   VISTA 3: JUEGOS Y SABERES (4 MINIJUEGOS CON IDENTIDAD REAL)
+   ========================================================================== */
+.games-hub-header {
+  margin-bottom: 24px;
+}
+
+.games-hub-header h2 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--primary-forest);
+}
+
+.games-nav-tabs {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  margin-bottom: 24px;
+}
+
+.game-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-light);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.game-tab-btn:hover {
+  border-color: var(--primary-leaf);
+  color: var(--primary-forest);
+}
+
+.game-tab-btn.active {
+  background: var(--primary-leaf);
+  color: #FFFFFF;
+  border-color: var(--primary-forest);
+  box-shadow: 0 3px 0 var(--border-shadow);
+}
+
+.game-panel-container {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Minijuego 1: Descubriendo la Palabra */
+.word-discovery-card {
+  text-align: center;
+  max-width: 580px;
+  margin: 0 auto;
+}
+
+.word-clue-box {
+  background: var(--bg-canvas);
+  border: 1.5px dashed var(--border-medium);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  font-size: 1.05rem;
+  font-style: italic;
+  color: var(--text-main);
+  margin-bottom: 24px;
+}
+
+.word-options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+/* Minijuego 2: Memoria del Territorio (Cartas) */
+.memory-board-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.memory-card {
+  aspect-ratio: 1;
+  background: var(--primary-soft);
+  border: 2px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 8px;
+  cursor: pointer;
+  box-shadow: 0 3px 0 var(--border-medium);
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.memory-card.flipped {
+  background: #FFFFFF;
+  border-color: var(--accent-ochre);
+  box-shadow: 0 3px 0 var(--accent-ochre-dark);
+  color: var(--primary-forest);
+}
+
+.memory-card.matched {
+  background: var(--status-success-bg);
+  border-color: var(--status-success);
+  color: var(--status-success);
+  pointer-events: none;
+}
+
+/* Minijuego 3: Tejiendo Frases */
+.sentence-weaving-wrap {
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+.tokens-slot-area {
+  min-height: 64px;
+  background: var(--bg-canvas);
+  border: 2px dashed var(--border-medium);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.word-token-chip {
+  background: #FFFFFF;
+  border: 1.5px solid var(--primary-forest);
+  border-radius: var(--radius-full);
+  padding: 8px 16px;
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--primary-forest);
+  box-shadow: 0 2px 0 var(--primary-forest);
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.word-token-chip:hover {
+  background: var(--primary-soft);
+}
+
+/* Minijuego 4: Saberes de la Sierra (Trivia) */
+.trivia-question-box {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.trivia-question-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 20px;
+  line-height: 1.35;
+}
+
+.trivia-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.trivia-option-btn {
+  width: 100%;
+  text-align: left;
+  background: #FFFFFF;
+  border: 1.5px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  font-weight: 600;
+  color: var(--text-main);
+  box-shadow: 0 2px 0 var(--border-medium);
+  transition: all 0.15s ease;
+}
+
+.trivia-option-btn:hover {
+  background: var(--bg-hover);
+  border-color: var(--primary-leaf);
+}
+
+.trivia-option-btn.correct {
+  background: var(--status-success-bg);
+  border-color: var(--status-success);
+  color: var(--status-success);
+  font-weight: 700;
+}
+
+.trivia-option-btn.wrong {
+  background: var(--status-error-bg);
+  border-color: var(--status-error);
+  color: var(--status-error);
+}
+
+/* ==========================================================================
+   VISTA 4: DICCIONARIO BILINGUE Y CONTRASTE DE SABERES
+   ========================================================================== */
+.lexicon-search-bar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.search-input-field {
+  flex: 1;
+  padding: 12px 18px;
+  border: 1.5px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  background: #FFFFFF;
+  font-size: 0.95rem;
+  color: var(--text-main);
+  transition: border-color 0.2s ease;
+}
+
+.search-input-field:focus {
+  border-color: var(--primary-leaf);
+}
+
+.lexicon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 36px;
+}
+
+.lexicon-card {
+  background: #FFFFFF;
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.lexicon-word-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.iku-term-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--primary-forest);
+}
+
+.es-term-sub {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+/* Sección Contraste de Saberes (Dentro de Diccionario) */
+.contrast-section-wrap {
+  margin-top: 36px;
+  padding-top: 28px;
+  border-top: 1.5px solid var(--border-light);
+}
+
+.contrast-card-box {
+  background: #FFFFFF;
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.contrast-split-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin: 16px 0;
+}
+
+.contrast-column {
+  padding: 16px;
+  border-radius: var(--radius-md);
+  font-size: 0.92rem;
+}
+
+.contrast-column.occidental {
+  background: #F4F6F5;
+  border-left: 4px solid #7B8F86;
+}
+
+.contrast-column.arhuaco {
+  background: var(--primary-soft);
+  border-left: 4px solid var(--primary-forest);
+}
+
+/* ==========================================================================
+   VISTA 5: ALBUM, PERFIL Y SOBERANIA DE DATOS (HABEAS DATA)
+   ========================================================================== */
+.profile-overview-card {
+  background: #FFFFFF;
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin-bottom: 28px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.profile-info-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.profile-avatar-wrap {
+  width: 64px;
+  height: 64px;
+  background: var(--primary-soft);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-forest);
+}
+
+.badges-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.badge-card {
+  background: #FFFFFF;
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.badge-card.unlocked {
+  border-color: var(--accent-ochre);
+}
+
+.badge-icon-disc {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-full);
+  margin: 0 auto 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #E8ECE8;
+  color: #90A096;
+}
+
+.badge-card.unlocked .badge-icon-disc {
+  background: var(--accent-ochre-light);
+  color: var(--accent-ochre-dark);
+}
+
+/* Acordeón de Soberanía y Habeas Data */
+.privacy-legal-card {
+  background: var(--bg-canvas);
+  border: 1.5px solid var(--border-medium);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin-top: 32px;
+}
+
+.legal-section-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--primary-forest);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ==========================================================================
+   MODAL DE PEDAGOGIA DE ANDAMIAJE (FASE 1: DESCUBRIMIENTO / FASE 2: RETO)
+   ========================================================================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(14, 38, 29, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-panel {
+  background: #FFFFFF;
+  border-radius: var(--radius-lg);
+  max-width: 620px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  animation: modalPop 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalPop {
+  from { opacity: 0; transform: scale(0.94); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal-header {
+  padding: 20px 24px;
+  border-bottom: 1.5px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-body {
+  padding: 24px;
+}
+
+/* Ficha de Descubrimiento (Fase 1) */
+.discovery-card-hero {
+  text-align: center;
+  background: linear-gradient(180deg, var(--primary-soft) 0%, #FFFFFF 100%);
+  border: 1.5px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.discovery-iku-title {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: var(--primary-forest);
+  letter-spacing: 0.02em;
+}
+
+.discovery-es-meaning {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--accent-earth);
+  margin-bottom: 14px;
+}
+
+.syllables-row {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.syllable-chip {
+  background: #FFFFFF;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-full);
+  padding: 4px 12px;
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--primary-forest);
+}
+
+/* Opciones de Reto (Fase 2) */
+.challenge-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.challenge-option-btn {
+  width: 100%;
+  text-align: left;
+  background: #FFFFFF;
+  border: 2px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  font-weight: 700;
+  color: var(--text-main);
+  box-shadow: 0 3px 0 var(--border-medium);
+  transition: all 0.12s ease;
+}
+
+.challenge-option-btn:hover:not(:disabled) {
+  border-color: var(--primary-leaf);
+  background: var(--bg-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 0 var(--border-shadow);
+}
+
+.challenge-option-btn:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: none;
+}
+
+.challenge-option-btn.correct {
+  background: var(--status-success-bg) !important;
+  border-color: var(--status-success) !important;
+  color: var(--status-success) !important;
+  box-shadow: 0 3px 0 #1B4D36 !important;
+}
+
+.challenge-option-btn.wrong {
+  background: var(--status-error-bg) !important;
+  border-color: var(--status-error) !important;
+  color: var(--status-error) !important;
+}
+
+.challenge-option-btn.option-eliminated {
+  opacity: 0.35;
+  text-decoration: line-through;
+  pointer-events: none;
+}
+
+/* Botón Pulsante: "Pedir pista a Semillita" */
+.btn-request-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--accent-ochre-light);
+  color: var(--accent-ochre-dark);
+  border: 1.5px solid #F1D49F;
+  border-radius: var(--radius-full);
+  padding: 8px 18px;
+  font-weight: 800;
+  font-size: 0.86rem;
+  animation: pulseHintGold 2s infinite;
+  margin-top: 10px;
+}
+
+@keyframes pulseHintGold {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(217, 155, 56, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(217, 155, 56, 0); }
+}
+
+.hint-box-display {
+  background: var(--accent-ochre-light);
+  border: 1.5px solid #F1D49F;
+  border-radius: var(--radius-md);
+  padding: 14px;
+  font-size: 0.92rem;
+  color: #573C0E;
+  margin-top: 14px;
+  line-height: 1.45;
+}
+
+/* Canvas de Celebración */
+#celebrationCanvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 150;
+}
+
+/* Toast Notice */
+.toast-notice {
+  position: fixed;
+  bottom: 84px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--primary-deep);
+  color: #FFFFFF;
+  padding: 12px 24px;
+  border-radius: var(--radius-full);
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.toast-notice.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ==========================================================================
+   RESPONSIVIDAD (MOBILE & TABLET)
+   ========================================================================== */
+@media (max-width: 860px) {
+  .sidebar {
+    display: none;
+  }
+
+  .bottom-nav {
+    display: block;
+  }
+
+  .topbar {
+    padding: 0 16px;
+  }
+
+  .view-content {
+    padding: 20px 16px 84px;
+  }
+
+  .home-hero-inner {
+    flex-direction: column-reverse;
+    text-align: center;
+    gap: 16px;
+  }
+
+  .home-hero-text {
+    max-width: 100%;
+  }
+
+  .home-mascot-area {
+    margin-bottom: 4px;
+  }
+
+  .zigzag-nodes-grid {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 28px;
+  }
+
+  .level-node-wrap:nth-child(2) {
+    transform: none;
+  }
+  .level-node-wrap:nth-child(4) {
+    transform: none;
+  }
+
+  .contrast-split-grid {
+    grid-template-columns: 1fr;
+  }
+}

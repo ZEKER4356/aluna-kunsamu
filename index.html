@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1E5641">
+  <meta name="description" content="KUNSAMU: Plataforma educativa intercultural offline-first para el aprendizaje de la lengua Iku (Arhuaco) y la cosmovision de la Sierra Nevada de Santa Marta (Aluna IA).">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="KUNSAMU">
+
+  <title>KUNSAMU · Saberes y Lengua Iku (Sierra Nevada)</title>
+
+  <!-- PWA Manifest & Favicon (Semillita SVG) -->
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" type="image/svg+xml" href="./assets/semillita.svg">
+  <link rel="apple-touch-icon" href="./assets/semillita.svg">
+
+  <!-- Estilos del Sistema de Diseno Intercultural -->
+  <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body class="theme-visitante">
+
+  <!-- Canvas de Celebracion para Particulas y Destellos -->
+  <canvas id="celebrationCanvas" aria-hidden="true"></canvas>
+
+  <div class="app-container">
+
+    <!-- 1. BARRA LATERAL (DESKTOP) CON EXACTAMENTE 5 SECCIONES -->
+    <aside class="sidebar" aria-label="Navegacion principal">
+      <div class="sidebar-brand">
+        <div class="brand-icon-wrap">
+          <img src="./assets/semillita.svg" alt="Semillita" width="36" height="36">
+        </div>
+        <div>
+          <div class="brand-title">KUNSAMU</div>
+          <span class="brand-sub">Aluna · Lengua Iku</span>
+        </div>
+      </div>
+
+      <nav class="nav-menu" aria-label="Menu principal">
+        <button class="nav-item-btn active" data-view="inicio" id="navBtn-inicio">
+          <span class="nav-icon" id="navIcon-inicio"></span>
+          <span>Inicio</span>
+        </button>
+        <button class="nav-item-btn" data-view="ruta" id="navBtn-ruta">
+          <span class="nav-icon" id="navIcon-ruta"></span>
+          <span>Ruta (Pisos)</span>
+        </button>
+        <button class="nav-item-btn" data-view="juegos" id="navBtn-juegos">
+          <span class="nav-icon" id="navIcon-juegos"></span>
+          <span>Juegos y Saberes</span>
+        </button>
+        <button class="nav-item-btn" data-view="diccionario" id="navBtn-diccionario">
+          <span class="nav-icon" id="navIcon-diccionario"></span>
+          <span>Diccionario</span>
+        </button>
+        <button class="nav-item-btn" data-view="perfil" id="navBtn-perfil">
+          <span class="nav-icon" id="navIcon-perfil"></span>
+          <span>Album y Perfil</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-mascot-card">
+          <div class="sidebar-mascot-img">
+            <img src="./assets/semillita.svg" alt="Semillita Guia" width="36" height="42">
+          </div>
+          <div class="sidebar-mascot-text">
+            <strong>Semillita</strong>
+            <div>Guia intercultural activa</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- AREA DE CONTENIDO PRINCIPAL -->
+    <div class="main-wrapper">
+
+      <!-- BARRA SUPERIOR (TOPBAR) -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <!-- Selector rapido de perfil -->
+          <button class="pill-role-switch" id="btnQuickRoleSwitch" aria-label="Cambiar perfil intercultural">
+            <span class="svg-icon" id="rolePillIcon" style="width: 16px; height: 16px;"></span>
+            <span id="rolePillText">Perfil: Hermano Menor</span>
+          </button>
+        </div>
+
+        <div class="topbar-right">
+          <!-- Puntos acumulados -->
+          <div class="stat-pill points">
+            <span class="svg-icon" id="topbarPointsIcon" style="width: 16px; height: 16px;"></span>
+            <span id="topBarPoints">0</span>
+            <span style="font-size: 0.76rem; font-weight: 600;">pts</span>
+          </div>
+
+          <!-- Racha de dias -->
+          <div class="stat-pill">
+            <span class="svg-icon" id="topbarStreakIcon" style="width: 16px; height: 16px;"></span>
+            <span id="topBarStreak">1</span>
+            <span style="font-size: 0.76rem; font-weight: 600;">dia</span>
+          </div>
+
+          <!-- Silenciar / Activar Sonido -->
+          <button class="icon-action-btn" id="btnToggleSound" aria-label="Silenciar o activar sonidos">
+            <span id="soundToggleIcon" style="display: flex; align-items: center; justify-content: center;"></span>
+          </button>
+
+          <!-- Lectura Facil (Accesibilidad) -->
+          <button class="icon-action-btn" id="btnToggleEasyReading" aria-label="Activar modo lectura facil">
+            <span id="easyReadingIcon" style="display: flex; align-items: center; justify-content: center;"></span>
+          </button>
+        </div>
+      </header>
+
+      <!-- VISTAS DE LA PLATAFORMA (5 SECCIONES EXACTAS) -->
+      <main class="view-content">
+
+        <!-- ================================================================
+             1. VISTA: INICIO
+             ================================================================ -->
+        <section class="app-view active" id="viewInicio">
+          <!-- Hero Banner de Bienvenida -->
+          <div class="home-hero-card">
+            <div class="home-hero-inner">
+              <div class="home-hero-text">
+                <span class="hero-tag" id="homeHeroTag">Sierra Nevada de Santa Marta</span>
+                <h1 id="homeHeroGreeting">Bienvenido a KUNSAMU</h1>
+                <p id="homeHeroDesc">
+                  Un puente de dialogo intercultural para escuchar el territorio, aprender la lengua Iku del pueblo Arhuaco y respetar la Ley de Origen.
+                </p>
+                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                  <button class="btn-primary" id="btnContinueNextLevel">
+                    <span class="svg-icon" id="btnPlayIcon"></span>
+                    <span id="btnContinueLevelText">Continuar siguiente reto</span>
+                  </button>
+                  <button class="btn-secondary" id="btnExploreRouteHero">
+                    Ver todos los pisos
+                  </button>
+                </div>
+              </div>
+
+              <!-- Mascota Semillita en Hero -->
+              <div class="home-mascot-area">
+                <div class="mascot-hero-svg-wrap" id="homeMascotWrap">
+                  <!-- Se inyecta inline el SVG para soportar estados y animaciones -->
+                </div>
+                <span style="font-size: 0.8rem; font-weight: 700; color: #FFFFFF; margin-top: 8px;">Semillita</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Resumen Rapido de Metricas -->
+          <div class="stats-overview-grid">
+            <div class="stat-summary-card">
+              <div class="stat-icon-badge green" id="statBadgeLevels"></div>
+              <div>
+                <div class="stat-number" id="homeCompletedLevels">0 / 24</div>
+                <div class="stat-label">Niveles en la Sierra</div>
+              </div>
+            </div>
+
+            <div class="stat-summary-card">
+              <div class="stat-icon-badge gold" id="statBadgeBadges"></div>
+              <div>
+                <div class="stat-number" id="homeCompletedBadges">0 / 6</div>
+                <div class="stat-label">Insignias del Album</div>
+              </div>
+            </div>
+
+            <div class="stat-summary-card">
+              <div class="stat-icon-badge earth" id="statBadgeWords"></div>
+              <div>
+                <div class="stat-number" id="homeCustomWords">0</div>
+                <div class="stat-label">Vocablos Comunitarios</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bocadillo Contextual Vivo de Semillita -->
+          <div class="mascot-speech-bubble-banner">
+            <div class="bubble-mascot-thumb" id="bubbleMascotThumb"></div>
+            <div class="bubble-text-content">
+              <h3 id="bubbleMascotTitle">Consejo de Semillita</h3>
+              <p id="homeMascotMessage">
+                Antes de subir hacia las altas cumbres, recuerda pedir permiso a la cuenca y escuchar el murmullo del rio.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             2. VISTA: RUTA (PISOS DEL SABER EN TEJIDO ZIGZAG)
+             ================================================================ -->
+        <section class="app-view" id="viewRuta">
+          <div class="route-header">
+            <span class="hero-tag" style="background: var(--primary-soft); color: var(--primary-forest);">
+              Ascenso por la Sierra Nevada
+            </span>
+            <h2 id="routeViewTitle">Pisos Territoriales del Saber</h2>
+            <p id="routeViewSubtitle">
+              Recorrido en tejido geometrico arhuaco. Avanza piso por piso desde la Linea Negra hasta los picos nevados.
+            </p>
+          </div>
+
+          <!-- Contenedor dinamico de los 6 pisos en zigzag -->
+          <div id="routeStagesContainer"></div>
+        </section>
+
+        <!-- ================================================================
+             3. VISTA: JUEGOS Y SABERES (PRACTICA LIBRE)
+             ================================================================ -->
+        <section class="app-view" id="viewJuegos">
+          <div class="games-hub-header">
+            <span class="hero-tag" style="background: var(--primary-soft); color: var(--primary-forest);">
+              Practica Libre e Intercultural
+            </span>
+            <h2>Juegos y Saberes de la Sierra</h2>
+            <p>Ejercita tu memoria, aprende palabras en Iku y descubre datos curiosos de la Sierra Nevada.</p>
+          </div>
+
+          <!-- Navegacion de las 4 modalidades de juego -->
+          <div class="games-nav-tabs">
+            <button class="game-tab-btn active" data-game="palabra">
+              <span id="tabIconPalabra"></span>
+              <span>Descubriendo la Palabra</span>
+            </button>
+            <button class="game-tab-btn" data-game="memoria">
+              <span id="tabIconMemoria"></span>
+              <span>Memoria del Territorio</span>
+            </button>
+            <button class="game-tab-btn" data-game="frases">
+              <span id="tabIconFrases"></span>
+              <span>Tejiendo Frases</span>
+            </button>
+            <button class="game-tab-btn" data-game="trivia">
+              <span id="tabIconTrivia"></span>
+              <span>Saberes de la Sierra</span>
+            </button>
+          </div>
+
+          <!-- Panel interactivo dinamico de minijuegos -->
+          <div class="game-panel-container" id="gamePanelContainer">
+            <!-- Inyectado por app.js segun el juego activo -->
+          </div>
+        </section>
+
+        <!-- ================================================================
+             4. VISTA: DICCIONARIO BILINGUE Y CONTRASTE DE SABERES
+             ================================================================ -->
+        <section class="app-view" id="viewDiccionario">
+          <div class="route-header">
+            <span class="hero-tag" style="background: var(--primary-soft); color: var(--primary-forest);">
+              Lengua Viva
+            </span>
+            <h2>Diccionario Bilingüe Español / Iku</h2>
+            <p>Busca terminos ancestrales, escucha su pronunciacion y comprende su contexto territorial.</p>
+          </div>
+
+          <div class="lexicon-search-bar">
+            <input type="text"
+                   id="lexiconSearchInput"
+                   class="search-input-field"
+                   placeholder="Buscar en Español o en Iku (ej. Tima, Agua, Aluna, Chundwa)..."
+                   aria-label="Buscar palabra">
+          </div>
+
+          <!-- Grid de tarjetas de vocabulario -->
+          <div class="lexicon-grid" id="lexiconGridContainer"></div>
+
+          <!-- Seccion Integrada: Contraste de Saberes -->
+          <div class="contrast-section-wrap">
+            <div style="margin-bottom: 20px;">
+              <h3 style="font-size: 1.45rem; font-weight: 800; color: var(--primary-forest);">
+                Contraste de Saberes (Espejo Intercultural)
+              </h3>
+              <p style="color: var(--text-muted); font-size: 0.92rem;">
+                Compara lado a lado como se comprende un principio desde la mirada occidental frente a la cosmovision Arhuaca.
+              </p>
+            </div>
+
+            <div id="contrastCardsContainer"></div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             5. VISTA: ALBUM Y PERFIL (INSIGNIAS, TALLER Y HABEAS DATA)
+             ================================================================ -->
+        <section class="app-view" id="viewPerfil">
+          <!-- Tarjeta de Perfil Activo -->
+          <div class="profile-overview-card">
+            <div class="profile-info-group">
+              <div class="profile-avatar-wrap" id="profileAvatarIcon"></div>
+              <div>
+                <h2 style="font-size: 1.4rem; font-weight: 800;" id="profileCurrentTitle">Hermano Menor</h2>
+                <div style="font-size: 0.85rem; color: var(--text-muted);" id="profileCurrentDesc">
+                  Ruta de aprendizaje guiado y respeto a la Ley de Origen.
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <button class="btn-primary" id="btnSwitchProfileInView">
+                Cambiar de Perfil
+              </button>
+              <button class="btn-secondary" id="btnResetActiveProfile" style="color: var(--status-error); border-color: #E8B4B0;">
+                Reiniciar progreso de este perfil
+              </button>
+            </div>
+          </div>
+
+          <!-- Album de Insignias Territoriales -->
+          <div style="margin-bottom: 24px;">
+            <h3 style="font-size: 1.35rem; font-weight: 800; color: var(--primary-forest); margin-bottom: 6px;">
+              Album de Insignias Territoriales
+            </h3>
+            <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 16px;">
+              Medallas desbloqueadas al culminar los pisos de la Sierra Nevada.
+            </p>
+            <div class="badges-gallery-grid" id="badgesGalleryContainer"></div>
+          </div>
+
+          <!-- Taller Comunitario (Grabacion de Vocablos Locales) -->
+          <div class="piso-container" style="margin-bottom: 32px;">
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--primary-forest); margin-bottom: 8px;">
+              Taller Comunitario de la Palabra
+            </h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 18px;">
+              Espacio para que sabedores, docentes y mayores registren terminos en Iku y audios con consentimiento previo.
+            </p>
+
+            <form id="communityWordForm" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+              <div>
+                <label style="font-size: 0.82rem; font-weight: 700; display: block; margin-bottom: 4px;">Termino en Español *</label>
+                <input type="text" name="wordEs" class="search-input-field" style="width: 100%;" required placeholder="Ej. Semilla">
+              </div>
+              <div>
+                <label style="font-size: 0.82rem; font-weight: 700; display: block; margin-bottom: 4px;">Termino en Iku *</label>
+                <input type="text" name="wordIku" class="search-input-field" style="width: 100%;" required placeholder="Ej. Kunu">
+              </div>
+              <div>
+                <label style="font-size: 0.82rem; font-weight: 700; display: block; margin-bottom: 4px;">Guia Fonetica</label>
+                <input type="text" name="wordPhonetic" class="search-input-field" style="width: 100%;" placeholder="Ej. ku-nu">
+              </div>
+              <div>
+                <label style="font-size: 0.82rem; font-weight: 700; display: block; margin-bottom: 4px;">Autoridad o Fuente de Validacion *</label>
+                <input type="text" name="wordAuthorizer" class="search-input-field" style="width: 100%;" required placeholder="Ej. Mayor de la cuenca">
+              </div>
+              <div style="grid-column: 1 / -1;">
+                <label style="font-size: 0.82rem; font-weight: 700; display: block; margin-bottom: 4px;">Contexto Cultural y Etico</label>
+                <textarea name="wordContext" class="search-input-field" style="width: 100%; height: 70px; resize: vertical;" placeholder="Significado territorial..."></textarea>
+              </div>
+
+              <!-- Grabadora Nativa -->
+              <div style="grid-column: 1 / -1; display: flex; align-items: center; gap: 12px; margin-top: 6px;">
+                <button type="button" class="btn-secondary btn-sm" id="btnRecordAudio">
+                  <span id="micRecordIcon"></span>
+                  <span id="recordAudioLabel">Grabar Voz Nativa</span>
+                </button>
+                <button type="button" class="btn-secondary btn-sm" id="btnStopAudio" style="display: none; background: #FDE8E8; color: #9B2C2C;">
+                  Detener Grabacion
+                </button>
+                <span id="recordingStatusText" style="font-size: 0.82rem; color: var(--text-muted);">Sin grabacion</span>
+              </div>
+              <div id="audioPreviewSlot" style="grid-column: 1 / -1;"></div>
+
+              <div style="grid-column: 1 / -1; margin-top: 10px;">
+                <button type="submit" class="btn-forest">Guardar Termino en Memoria Local</button>
+              </div>
+            </form>
+
+            <div style="margin-top: 24px;" id="customWordsListWrapper">
+              <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 10px;">Terminos Guardados Localmente:</h4>
+              <div id="customWordsList"></div>
+            </div>
+          </div>
+
+          <!-- Acordeon: Politica de Privacidad y Derechos Culturales -->
+          <div class="privacy-legal-card">
+            <div class="legal-section-title">
+              <span id="shieldLegalIcon"></span>
+              <span>Soberania de Datos y Privacidad (Habeas Data)</span>
+            </div>
+            <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 14px;">
+              En cumplimiento de la <strong>Ley 1581 de 2012 de Colombia</strong>, el <strong>Convenio 169 de la OIT</strong> y los estandares de <strong>Etiquetas de Conocimiento Tradicional (TK Labels)</strong>:
+            </p>
+            <ul style="font-size: 0.86rem; color: var(--text-main); margin-left: 20px; line-height: 1.6; margin-bottom: 18px;">
+              <li><strong>Zero-Tracking:</strong> No utilizamos rastreadores, analitica externa ni cookies de terceros.</li>
+              <li><strong>Almacenamiento Soberano:</strong> Tu progreso y los audios grabados viven exclusivamente en el almacenamiento local de tu navegador (LocalStorage e IndexedDB).</li>
+              <li><strong>Derecho al Olvido y Portabilidad:</strong> Puedes descargar una copia de tus datos en formato JSON o eliminarlos por completo cuando lo desees.</li>
+            </ul>
+
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+              <button class="btn-secondary btn-sm" id="btnExportDataJSON">
+                <span id="exportDataIcon"></span>
+                <span>Exportar Copia Soberana (JSON)</span>
+              </button>
+              <button class="btn-secondary btn-sm" id="btnWipeAllLocalData" style="color: var(--status-error); border-color: #E8B4B0;">
+                <span id="wipeDataIcon"></span>
+                <span>Borrar todos los datos locales</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- 2. BARRA DE NAVEGACION INFERIOR (MOVIL) CON LAS MISMAS 5 SECCIONES -->
+      <nav class="bottom-nav" aria-label="Navegacion movil">
+        <ul class="bottom-nav-list">
+          <li>
+            <button class="bottom-nav-btn active" data-view="inicio" id="mobBtn-inicio">
+              <span class="nav-icon" id="mobIcon-inicio"></span>
+              <span>Inicio</span>
+            </button>
+          </li>
+          <li>
+            <button class="bottom-nav-btn" data-view="ruta" id="mobBtn-ruta">
+              <span class="nav-icon" id="mobIcon-ruta"></span>
+              <span>Ruta</span>
+            </button>
+          </li>
+          <li>
+            <button class="bottom-nav-btn" data-view="juegos" id="mobBtn-juegos">
+              <span class="nav-icon" id="mobIcon-juegos"></span>
+              <span>Juegos</span>
+            </button>
+          </li>
+          <li>
+            <button class="bottom-nav-btn" data-view="diccionario" id="mobBtn-diccionario">
+              <span class="nav-icon" id="mobIcon-diccionario"></span>
+              <span>Diccionario</span>
+            </button>
+          </li>
+          <li>
+            <button class="bottom-nav-btn" data-view="perfil" id="mobBtn-perfil">
+              <span class="nav-icon" id="mobIcon-perfil"></span>
+              <span>Perfil</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MODALES DEL SISTEMA
+       ======================================================================== -->
+
+  <!-- Modal Global de Pedagogia de Andamiaje (Fase 1: Descubrimiento / Fase 2: Reto) -->
+  <div class="modal-overlay" id="globalAppModal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-panel" id="globalModalPanel"></div>
+  </div>
+
+  <!-- Modal Selector de Perfil Intercultural -->
+  <div class="modal-overlay" id="profileSelectorModal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-panel" style="max-width: 520px;">
+      <div class="modal-header">
+        <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--primary-forest);">
+          Elige tu Perfil Intercultural
+        </h3>
+        <button class="icon-action-btn" id="btnCloseProfileModal" aria-label="Cerrar modal">
+          <span id="closeProfileModalIcon"></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.92rem; color: var(--text-muted); margin-bottom: 20px;">
+          KUNSAMU adapta la experiencia segun tu relacion con la Sierra Nevada. Puedes alternar en cualquier momento sin perder tu avance.
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <!-- Opcion 1: Hermano Menor -->
+          <div class="challenge-option-btn" id="selectRoleVisitante" style="cursor: pointer; padding: 18px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+              <strong style="font-size: 1.05rem; color: var(--primary-forest);">Hermano Menor (Visitante / Aliado)</strong>
+              <span class="hero-tag" style="background: var(--primary-soft); color: var(--primary-forest);">Guiado</span>
+            </div>
+            <p style="font-size: 0.86rem; color: var(--text-muted); margin: 0;">
+              Enfocado en respeto territorial, protocolos culturales, traduccion asistida y comprension de la cosmovision.
+            </p>
+          </div>
+
+          <!-- Opcion 2: Comunidad Iku -->
+          <div class="challenge-option-btn" id="selectRoleComunidad" style="cursor: pointer; padding: 18px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+              <strong style="font-size: 1.05rem; color: var(--accent-earth);">Comunidad Arhuaca (Iku)</strong>
+              <span class="hero-tag" style="background: var(--accent-earth-soft); color: var(--accent-earth);">Inmersion</span>
+            </div>
+            <p style="font-size: 0.86rem; color: var(--text-muted); margin: 0;">
+              Enfocado en fortalecimiento linguistico directo, escritura en Iku, memoria comunitaria y fonetica oral.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Componente Toast de Notificaciones -->
+  <div class="toast-notice" id="appToastNotice" role="alert" aria-live="polite"></div>
+
+  <!-- SCRIPTS ORDENADOS DE LA APLICACION -->
+  <script src="./js/icons.js"></script>
+  <script src="./js/data-iku.js"></script>
+  <script src="./js/db.js"></script>
+  <script src="./js/app.js"></script>
+
+  <!-- Registro del Service Worker para Cloudflare Pages Offline-First -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js', { scope: './' })
+          .then((reg) => {
+            console.log('[Kunsamu PWA] Service Worker registrado con exito:', reg.scope);
+          })
+          .catch((err) => {
+            console.warn('[Kunsamu PWA] Error al registrar Service Worker:', err);
+          });
+      });
+    }
+  </script>
+</body>
+</html>
