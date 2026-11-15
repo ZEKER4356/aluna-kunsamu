@@ -200,10 +200,10 @@
    */
   function injectSemillitaSVG() {
     const wrap = $('homeMascotWrap');
-    if (wrap) wrap.innerHTML = SEMILLITA_SVG_STRING;
+    if (wrap && !wrap.querySelector('svg')) wrap.innerHTML = SEMILLITA_SVG_STRING;
 
     const thumb = $('bubbleMascotThumb');
-    if (thumb) thumb.innerHTML = SEMILLITA_SVG_STRING;
+    if (thumb && !thumb.querySelector('svg')) thumb.innerHTML = SEMILLITA_SVG_STRING;
   }
 
   /**
@@ -1663,6 +1663,31 @@
    * ==========================================================================
    */
   function setupTopBarEvents() {
+    const btnTopMascot = $('btnTopbarMascot');
+    if (btnTopMascot) {
+      btnTopMascot.onclick = () => {
+        SoundEngine.playClickSound();
+        setSemillitaHappy(1800);
+        const tips = [
+          'Semillita: ¡Que la luz de Aluna aclare tu pensamiento hoy!',
+          'Semillita: En la Sierra Nevada, cada rio es sangre viviente de la Madre Tierra.',
+          'Semillita: Puedes tocar cualquier nivel desbloqueado para aprender y repasar.',
+          'Semillita: Si tienes dudas en un reto, pide una pista antes de contestar.'
+        ];
+        const randomTip = tips[Math.floor(Math.random() * tips.length)];
+        showToast(randomTip);
+      };
+    }
+
+    const homeMascot = $('homeMascotWrap');
+    if (homeMascot) {
+      homeMascot.onclick = () => {
+        SoundEngine.playSuccessSound();
+        setSemillitaHappy(2200);
+        showToast('Semillita: ¡Hola, caminante! Estoy lista para subir contigo por la Sierra.');
+      };
+    }
+
     const btnSound = $('btnToggleSound');
     if (btnSound) {
       btnSound.onclick = () => {

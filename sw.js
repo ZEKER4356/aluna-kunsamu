@@ -9,13 +9,14 @@
  * ============================================================================
  */
 
-const CACHE_NAME = 'kunsamu-v6';
+const CACHE_NAME = 'kunsamu-v7';
 
 const STATIC_ASSETS = [
   './',
   './index.html',
   './manifest.json',
   './assets/semillita.svg',
+  './favicon.svg',
   './icon.svg',
   './css/styles.css',
   './js/icons.js',

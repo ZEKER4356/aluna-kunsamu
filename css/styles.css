@@ -337,6 +337,126 @@ a {
   gap: 12px;
 }
 
+.topbar-mascot-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--primary-soft);
+  color: var(--primary-forest);
+  border: 1.5px solid var(--border-medium);
+  padding: 4px 12px 4px 6px;
+  border-radius: var(--radius-full);
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 0 var(--border-medium);
+}
+
+.topbar-mascot-pill:hover {
+  background: #D3ECD0;
+  border-color: var(--primary-forest);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 0 var(--border-shadow);
+}
+
+.topbar-mascot-pill:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+.topbar-mascot-icon {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   ANIMACIONES GLOBALES DE SEMILLITA
+   ========================================================================== */
+.semillita-svg {
+  overflow: visible;
+  display: block;
+}
+.semillita-bob {
+  animation: semBob 3s ease-in-out infinite;
+  transform-origin: 70px 115px;
+}
+.semillita-eye {
+  transform-origin: center;
+  animation: semBlink 4.5s ease-in-out infinite;
+}
+.semillita-leaf {
+  transform-origin: 52px 35px;
+  animation: semLeafSway 3.6s ease-in-out infinite;
+}
+
+@keyframes semBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+@keyframes semBlink {
+  0%, 92%, 100% { transform: scaleY(1); }
+  96% { transform: scaleY(0.1); }
+}
+@keyframes semLeafSway {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(5deg); }
+}
+
+.semillita--happy .semillita-bob {
+  animation: semHappyJump 0.6s ease-in-out 3;
+}
+.semillita--happy .semillita-eye {
+  animation: none;
+}
+.semillita--happy .eye-normal {
+  display: none !important;
+}
+.semillita--happy .eye-happy {
+  display: block !important;
+}
+.semillita--happy .mouth-normal {
+  display: none !important;
+}
+.semillita--happy .mouth-happy {
+  display: block !important;
+}
+
+@keyframes semHappyJump {
+  0%, 100% { transform: translateY(0) scale(1); }
+  40% { transform: translateY(-16px) scale(1.06, 0.94); }
+  70% { transform: translateY(2px) scale(0.96, 1.04); }
+}
+
+.semillita--thinking .semillita-bob {
+  animation: semThinkTilt 2.2s ease-in-out infinite;
+}
+.semillita--thinking .semillita-leaf {
+  animation: semThinkLeaf 1.2s ease-in-out infinite;
+}
+@keyframes semThinkTilt {
+  0%, 100% { transform: rotate(0deg) translateY(0); }
+  50% { transform: rotate(6deg) translateY(-4px); }
+}
+@keyframes semThinkLeaf {
+  0%, 100% { transform: rotate(8deg); }
+  50% { transform: rotate(-6deg); }
+}
+
+.brand-icon-wrap svg,
+.sidebar-mascot-img svg,
+.topbar-mascot-icon svg,
+.mascot-hero-svg-wrap svg,
+.bubble-mascot-thumb svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
 .stat-pill {
   display: inline-flex;
   align-items: center;

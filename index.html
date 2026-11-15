@@ -11,10 +11,119 @@
 
   <title>KUNSAMU · Saberes y Lengua Iku (Sierra Nevada)</title>
 
-  <!-- PWA Manifest & Favicon (Semillita SVG) -->
+  <!-- PWA Manifest & Favicon (Semillita SVG + Favicon Animado) -->
   <link rel="manifest" href="./manifest.json">
-  <link rel="icon" type="image/svg+xml" href="./assets/semillita.svg">
-  <link rel="apple-touch-icon" href="./assets/semillita.svg">
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <link rel="apple-touch-icon" href="./icon.svg">
+
+  <!-- Motor de Favicon Animado en Tiempo Real (Flotacion y Parpadeo de Semillita) -->
+  <script>
+    (function() {
+      try {
+        var canvas = document.createElement('canvas');
+        canvas.width = 32;
+        canvas.height = 32;
+        var ctx = canvas.getContext('2d');
+        if (!ctx) return;
+        var frame = 0;
+        var faviconEl = document.querySelector("link[rel='icon']");
+        function updateFavicon() {
+          ctx.clearRect(0, 0, 32, 32);
+          var bob = Math.sin(frame * 0.22) * 1.5;
+          var isBlink = (frame % 28 >= 25);
+          var leafAngle = Math.sin(frame * 0.16) * 0.2;
+
+          ctx.save();
+          ctx.translate(16, 17 + bob);
+
+          // Patitas
+          ctx.strokeStyle = '#1E5641';
+          ctx.lineWidth = 1.6;
+          ctx.lineCap = 'round';
+          ctx.beginPath();
+          ctx.moveTo(-5, 9); ctx.lineTo(-3, 11); ctx.lineTo(-1, 9);
+          ctx.moveTo(1, 9); ctx.lineTo(3, 11); ctx.lineTo(5, 9);
+          ctx.stroke();
+
+          // Hoja
+          ctx.save();
+          ctx.translate(-3, -10);
+          ctx.rotate(leafAngle - 0.25);
+          ctx.fillStyle = '#59B96B';
+          ctx.strokeStyle = '#1E5641';
+          ctx.lineWidth = 1.3;
+          ctx.beginPath();
+          ctx.ellipse(0, -3.5, 3.5, 6, -0.3, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+          ctx.restore();
+
+          // Sombra
+          ctx.fillStyle = 'rgba(27, 77, 54, 0.25)';
+          ctx.beginPath();
+          ctx.ellipse(0, 9, 8, 2.2, 0, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Cuerpo
+          ctx.fillStyle = '#96E5A8';
+          ctx.strokeStyle = '#1E5641';
+          ctx.lineWidth = 1.7;
+          ctx.beginPath();
+          ctx.ellipse(0, 0, 10.5, 9.8, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+
+          // Brillo
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.55)';
+          ctx.beginPath();
+          ctx.ellipse(-4, -4, 3, 1.8, -0.4, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Mejillas
+          ctx.fillStyle = 'rgba(236, 166, 70, 0.55)';
+          ctx.beginPath();
+          ctx.arc(-5.5, 2.2, 1.9, 0, Math.PI * 2);
+          ctx.arc(5.5, 2.2, 1.9, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Ojos
+          ctx.fillStyle = '#16463E';
+          if (isBlink) {
+            ctx.strokeStyle = '#16463E';
+            ctx.lineWidth = 1.3;
+            ctx.beginPath();
+            ctx.moveTo(-5, -0.5); ctx.lineTo(-1.5, -0.5);
+            ctx.moveTo(1.5, -0.5); ctx.lineTo(5, -0.5);
+            ctx.stroke();
+          } else {
+            ctx.beginPath();
+            ctx.ellipse(-3.2, -1, 1.4, 2.2, 0, 0, Math.PI * 2);
+            ctx.ellipse(3.2, -1, 1.4, 2.2, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#FFFFFF';
+            ctx.beginPath();
+            ctx.arc(-2.6, -1.8, 0.65, 0, Math.PI * 2);
+            ctx.arc(3.8, -1.8, 0.65, 0, Math.PI * 2);
+            ctx.fill();
+          }
+
+          // Sonrisa
+          ctx.strokeStyle = '#16463E';
+          ctx.lineWidth = 1.3;
+          ctx.beginPath();
+          ctx.arc(0, 1.6, 2.4, 0.15, Math.PI - 0.15);
+          ctx.stroke();
+
+          ctx.restore();
+
+          if (faviconEl) faviconEl.href = canvas.toDataURL('image/png');
+          frame++;
+        }
+        updateFavicon();
+        setInterval(updateFavicon, 150);
+      } catch (e) {}
+    })();
+  </script>
 
   <!-- Estilos del Sistema de Diseno Intercultural -->
   <link rel="stylesheet" href="./css/styles.css">
@@ -30,7 +139,27 @@
     <aside class="sidebar" aria-label="Navegacion principal">
       <div class="sidebar-brand">
         <div class="brand-icon-wrap">
-          <img src="./assets/semillita.svg" alt="Semillita" width="36" height="36">
+          <svg viewBox="0 0 140 150" width="36" height="36" class="semillita-svg" role="img" aria-label="Semillita">
+            <g class="semillita-bob">
+              <g stroke="#1E5641" stroke-width="4.2" stroke-linecap="round" fill="none">
+                <path d="M 50 128 L 57 137 L 64 128" />
+                <path d="M 74 128 L 81 137 L 88 128" />
+              </g>
+              <path d="M 52 42 C 40 28, 26 12, 42 2 C 58 10, 68 24, 56 43 Z" fill="#59B96B" stroke="#1E5641" stroke-width="3.8" />
+              <path d="M 70 42 C 98 42, 114 62, 114 88 C 114 114, 96 126, 70 126 C 44 126, 26 114, 26 88 C 26 62, 42 42, 70 42 Z" fill="#96E5A8" stroke="#1E5641" stroke-width="4.5" />
+              <ellipse cx="40" cy="95" rx="7.5" ry="4.5" fill="#ECA646" opacity="0.5" />
+              <ellipse cx="98" cy="95" rx="7.5" ry="4.5" fill="#ECA646" opacity="0.5" />
+              <g class="semillita-eye eye-normal">
+                <ellipse cx="50" cy="84" rx="5.5" ry="8" fill="#16463E" />
+                <circle cx="52" cy="80.5" r="2.2" fill="#FFFFFF" />
+              </g>
+              <g class="semillita-eye eye-normal">
+                <ellipse cx="88" cy="84" rx="5.5" ry="8" fill="#16463E" />
+                <circle cx="90" cy="80.5" r="2.2" fill="#FFFFFF" />
+              </g>
+              <path class="mouth-normal" d="M 62 97 Q 69 104 76 97" fill="none" stroke="#16463E" stroke-width="3.2" stroke-linecap="round" />
+            </g>
+          </svg>
         </div>
         <div>
           <div class="brand-title">KUNSAMU</div>
@@ -64,7 +193,27 @@
       <div class="sidebar-footer">
         <div class="sidebar-mascot-card">
           <div class="sidebar-mascot-img">
-            <img src="./assets/semillita.svg" alt="Semillita Guia" width="36" height="42">
+            <svg viewBox="0 0 140 150" width="36" height="42" class="semillita-svg" role="img" aria-label="Semillita Guia">
+              <g class="semillita-bob">
+                <g stroke="#1E5641" stroke-width="4.2" stroke-linecap="round" fill="none">
+                  <path d="M 50 128 L 57 137 L 64 128" />
+                  <path d="M 74 128 L 81 137 L 88 128" />
+                </g>
+                <path d="M 52 42 C 40 28, 26 12, 42 2 C 58 10, 68 24, 56 43 Z" fill="#59B96B" stroke="#1E5641" stroke-width="3.8" />
+                <path d="M 70 42 C 98 42, 114 62, 114 88 C 114 114, 96 126, 70 126 C 44 126, 26 114, 26 88 C 26 62, 42 42, 70 42 Z" fill="#96E5A8" stroke="#1E5641" stroke-width="4.5" />
+                <ellipse cx="40" cy="95" rx="7.5" ry="4.5" fill="#ECA646" opacity="0.5" />
+                <ellipse cx="98" cy="95" rx="7.5" ry="4.5" fill="#ECA646" opacity="0.5" />
+                <g class="semillita-eye eye-normal">
+                  <ellipse cx="50" cy="84" rx="5.5" ry="8" fill="#16463E" />
+                  <circle cx="52" cy="80.5" r="2.2" fill="#FFFFFF" />
+                </g>
+                <g class="semillita-eye eye-normal">
+                  <ellipse cx="88" cy="84" rx="5.5" ry="8" fill="#16463E" />
+                  <circle cx="90" cy="80.5" r="2.2" fill="#FFFFFF" />
+                </g>
+                <path class="mouth-normal" d="M 62 97 Q 69 104 76 97" fill="none" stroke="#16463E" stroke-width="3.2" stroke-linecap="round" />
+              </g>
+            </svg>
           </div>
           <div class="sidebar-mascot-text">
             <strong>Semillita</strong>
@@ -88,6 +237,30 @@
         </div>
 
         <div class="topbar-right">
+          <!-- Mascota Semillita Viva en la Barra Superior (Arriba a la derecha) -->
+          <button class="topbar-mascot-pill" id="btnTopbarMascot" aria-label="Semillita, guia interactiva">
+            <span class="topbar-mascot-icon">
+              <svg viewBox="0 0 140 150" width="24" height="24" class="semillita-svg" role="img" aria-hidden="true">
+                <g class="semillita-bob">
+                  <path d="M 52 42 C 40 28, 26 12, 42 2 C 58 10, 68 24, 56 43 Z" fill="#59B96B" stroke="#1E5641" stroke-width="4" />
+                  <path d="M 70 42 C 98 42, 114 62, 114 88 C 114 114, 96 126, 70 126 C 44 126, 26 114, 26 88 C 26 62, 42 42, 70 42 Z" fill="#96E5A8" stroke="#1E5641" stroke-width="5" />
+                  <ellipse cx="40" cy="95" rx="7.5" ry="4.5" fill="#ECA646" opacity="0.6" />
+                  <ellipse cx="98" cy="95" rx="7.5" ry="4.5" fill="#ECA646" opacity="0.6" />
+                  <g class="semillita-eye eye-normal">
+                    <ellipse cx="50" cy="84" rx="6" ry="8.5" fill="#16463E" />
+                    <circle cx="52" cy="80.5" r="2.5" fill="#FFFFFF" />
+                  </g>
+                  <g class="semillita-eye eye-normal">
+                    <ellipse cx="88" cy="84" rx="6" ry="8.5" fill="#16463E" />
+                    <circle cx="90" cy="80.5" r="2.5" fill="#FFFFFF" />
+                  </g>
+                  <path class="mouth-normal" d="M 62 97 Q 69 104 76 97" fill="none" stroke="#16463E" stroke-width="3.5" stroke-linecap="round" />
+                </g>
+              </svg>
+            </span>
+            <span>Semillita</span>
+          </button>
+
           <!-- Puntos acumulados -->
           <div class="stat-pill points">
             <span class="svg-icon" id="topbarPointsIcon" style="width: 16px; height: 16px;"></span>
@@ -141,10 +314,53 @@
                 </div>
               </div>
 
-              <!-- Mascota Semillita en Hero -->
+              <!-- Mascota Semillita en Hero (Arriba a la derecha del Inicio) -->
               <div class="home-mascot-area">
-                <div class="mascot-hero-svg-wrap" id="homeMascotWrap">
-                  <!-- Se inyecta inline el SVG para soportar estados y animaciones -->
+                <div class="mascot-hero-svg-wrap" id="homeMascotWrap" style="cursor: pointer;" title="Haz clic para saludar a Semillita">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 150" class="semillita-svg" role="img" aria-label="Semillita Guia Intercultural">
+                    <defs>
+                      <linearGradient id="leafGradHero" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#73D98A"/>
+                        <stop offset="60%" stop-color="#4CAF68"/>
+                        <stop offset="100%" stop-color="#237A4B"/>
+                      </linearGradient>
+                      <linearGradient id="bodyGradHero" x1="20%" y1="0%" x2="80%" y2="100%">
+                        <stop offset="0%" stop-color="#C2F3CB"/>
+                        <stop offset="45%" stop-color="#96E5A8"/>
+                        <stop offset="100%" stop-color="#5EBE78"/>
+                      </linearGradient>
+                    </defs>
+                    <g class="semillita-bob">
+                      <g class="semillita-feet" stroke="#1E5641" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round" fill="none">
+                        <path d="M 50 128 L 57 137 L 64 128" />
+                        <path d="M 74 128 L 81 137 L 88 128" />
+                      </g>
+                      <g class="semillita-leaf">
+                        <path d="M 52 42 C 40 28, 26 12, 42 2 C 58 10, 68 24, 56 43 Z" fill="url(#leafGradHero)" stroke="#1E5641" stroke-width="3.8" stroke-linejoin="round" />
+                        <path d="M 44 26 C 47 18, 45 10, 42 4" fill="none" stroke="#1E5641" stroke-width="2.2" stroke-linecap="round" />
+                      </g>
+                      <path d="M 52 38 Q 54 44 56 48" fill="none" stroke="#1E5641" stroke-width="4" stroke-linecap="round" />
+                      <ellipse cx="69" cy="120" rx="36" ry="10" fill="#1B4D36" opacity="0.2" />
+                      <path d="M 70 42 C 98 42, 114 62, 114 88 C 114 114, 96 126, 70 126 C 44 126, 26 114, 26 88 C 26 62, 42 42, 70 42 Z" fill="url(#bodyGradHero)" stroke="#1E5641" stroke-width="4.5" stroke-linejoin="round" />
+                      <ellipse cx="48" cy="58" rx="10" ry="6" transform="rotate(-25 48 58)" fill="#FFFFFF" opacity="0.45" />
+                      <ellipse cx="40" cy="95" rx="7.5" ry="4.5" fill="#ECA646" opacity="0.5" />
+                      <ellipse cx="98" cy="95" rx="7.5" ry="4.5" fill="#ECA646" opacity="0.5" />
+                      <g class="semillita-eye eye-normal">
+                        <ellipse cx="50" cy="84" rx="5.5" ry="8" fill="#16463E" />
+                        <circle cx="52" cy="80.5" r="2.2" fill="#FFFFFF" />
+                      </g>
+                      <g class="semillita-eye eye-normal">
+                        <ellipse cx="88" cy="84" rx="5.5" ry="8" fill="#16463E" />
+                        <circle cx="90" cy="80.5" r="2.2" fill="#FFFFFF" />
+                      </g>
+                      <g class="eye-happy" style="display: none;" stroke="#16463E" stroke-width="3.5" stroke-linecap="round" fill="none">
+                        <path d="M 44 86 Q 50 78 56 86" />
+                        <path d="M 82 86 Q 88 78 94 86" />
+                      </g>
+                      <path class="mouth-normal" d="M 62 97 Q 69 104 76 97" fill="none" stroke="#16463E" stroke-width="3.2" stroke-linecap="round" />
+                      <path class="mouth-happy" style="display: none;" d="M 60 96 Q 69 108 78 96 Z" fill="#D9665B" stroke="#16463E" stroke-width="3" stroke-linejoin="round" />
+                    </g>
+                  </svg>
                 </div>
                 <span style="font-size: 0.8rem; font-weight: 700; color: #FFFFFF; margin-top: 8px;">Semillita</span>
               </div>
@@ -178,13 +394,52 @@
             </div>
           </div>
 
-          <!-- Bocadillo Contextual Vivo de Semillita -->
+          <!-- Bocadillo Contextual Vivo de Semillita (Quien es Semillita) -->
           <div class="mascot-speech-bubble-banner">
-            <div class="bubble-mascot-thumb" id="bubbleMascotThumb"></div>
+            <div class="bubble-mascot-thumb" id="bubbleMascotThumb">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 150" class="semillita-svg" role="img" aria-label="Semillita Guia">
+                <defs>
+                  <linearGradient id="leafGradThumb" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#73D98A"/>
+                    <stop offset="60%" stop-color="#4CAF68"/>
+                    <stop offset="100%" stop-color="#237A4B"/>
+                  </linearGradient>
+                  <linearGradient id="bodyGradThumb" x1="20%" y1="0%" x2="80%" y2="100%">
+                    <stop offset="0%" stop-color="#C2F3CB"/>
+                    <stop offset="45%" stop-color="#96E5A8"/>
+                    <stop offset="100%" stop-color="#5EBE78"/>
+                  </linearGradient>
+                </defs>
+                <g class="semillita-bob">
+                  <g stroke="#1E5641" stroke-width="4.2" stroke-linecap="round" fill="none">
+                    <path d="M 50 128 L 57 137 L 64 128" />
+                    <path d="M 74 128 L 81 137 L 88 128" />
+                  </g>
+                  <g class="semillita-leaf">
+                    <path d="M 52 42 C 40 28, 26 12, 42 2 C 58 10, 68 24, 56 43 Z" fill="url(#leafGradThumb)" stroke="#1E5641" stroke-width="3.8" />
+                  </g>
+                  <path d="M 52 38 Q 54 44 56 48" fill="none" stroke="#1E5641" stroke-width="4" stroke-linecap="round" />
+                  <path d="M 70 42 C 98 42, 114 62, 114 88 C 114 114, 96 126, 70 126 C 44 126, 26 114, 26 88 C 26 62, 42 42, 70 42 Z" fill="url(#bodyGradThumb)" stroke="#1E5641" stroke-width="4.5" />
+                  <ellipse cx="40" cy="95" rx="7.5" ry="4.5" fill="#ECA646" opacity="0.5" />
+                  <ellipse cx="98" cy="95" rx="7.5" ry="4.5" fill="#ECA646" opacity="0.5" />
+                  <g class="semillita-eye eye-normal">
+                    <ellipse cx="50" cy="84" rx="5.5" ry="8" fill="#16463E" />
+                    <circle cx="52" cy="80.5" r="2.2" fill="#FFFFFF" />
+                  </g>
+                  <g class="semillita-eye eye-normal">
+                    <ellipse cx="88" cy="84" rx="5.5" ry="8" fill="#16463E" />
+                    <circle cx="90" cy="80.5" r="2.2" fill="#FFFFFF" />
+                  </g>
+                  <path class="mouth-normal" d="M 62 97 Q 69 104 76 97" fill="none" stroke="#16463E" stroke-width="3.2" stroke-linecap="round" />
+                </g>
+              </svg>
+            </div>
             <div class="bubble-text-content">
-              <h3 id="bubbleMascotTitle">Consejo de Semillita</h3>
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                <h3 id="bubbleMascotTitle" style="color: var(--primary-forest); margin: 0;">¿Quien es Semillita? · Tu Guia Intercultural</h3>
+              </div>
               <p id="homeMascotMessage">
-                Antes de subir hacia las altas cumbres, recuerda pedir permiso a la cuenca y escuchar el murmullo del rio.
+                Soy Semillita, una semilla ancestral de la Sierra Nevada de Santa Marta. Germino con el pensamiento (Aluna) y la palabra viva (Kunsamu). Te acompano en cada piso para recordarte el respeto a la Madre Tierra y darte pistas de aprendizaje en lengua Iku.
               </p>
             </div>
           </div>
