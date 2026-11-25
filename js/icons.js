@@ -28,6 +28,17 @@ const ICONS = {
     <circle cx="17" cy="14" r="1" fill="currentColor"/>
   </svg>`,
 
+  misiones: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+    <line x1="4" y1="22" x2="4" y2="15"/>
+  </svg>`,
+
+  album: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <circle cx="12" cy="8" r="5"/>
+    <path d="m15 12 1.5 9-4.5-3-4.5 3 1.5-9"/>
+    <path d="M4 4h2M18 4h2"/>
+  </svg>`,
+
   diccionario: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
     <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
     <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
@@ -70,6 +81,26 @@ const ICONS = {
   </svg>`,
 
   piso6_picos: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="m2 20 7-14 4 7 4-5 5 12H2z"/>
+    <path d="m7.5 9 3 4 3-2 3.5 5"/>
+  </svg>`,
+
+  piso2_rio: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+    <path d="M12 12a3 3 0 0 0-3 3"/>
+  </svg>`,
+
+  piso4_fauna: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M12 3 2 12l10 9 10-9L12 3z"/>
+    <path d="m12 7-5 5 5 5 5-5-5-5z"/>
+  </svg>`,
+
+  piso5_tejido: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M12 3 2 12l10 9 10-9L12 3z"/>
+    <path d="m12 7-5 5 5 5 5-5-5-5z"/>
+  </svg>`,
+
+  piso6_nieve: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
     <path d="m2 20 7-14 4 7 4-5 5 12H2z"/>
     <path d="m7.5 9 3 4 3-2 3.5 5"/>
   </svg>`,

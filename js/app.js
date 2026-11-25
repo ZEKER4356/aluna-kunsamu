@@ -43,26 +43,26 @@
       </linearGradient>
       <style>
         .semillita-svg { overflow: visible; display: block; }
-        .semillita-bob { animation: semBob 3s ease-in-out infinite; transform-origin: 70px 115px; }
-        .semillita-eye { transform-origin: center; animation: semBlink 4.5s ease-in-out infinite; }
-        .semillita-leaf { transform-origin: 52px 35px; animation: semLeafSway 3.6s ease-in-out infinite; }
+        .semillita-body { animation: semBob 3s ease-in-out infinite; transform-origin: center bottom; }
+        .semillita-eye { transform-box: fill-box; transform-origin: center; animation: semBlink 4.5s ease-in-out infinite; }
+        .semillita-leaf { transform-origin: 52px 38px; animation: semLeafSway 3.6s ease-in-out infinite; }
         @keyframes semBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
         @keyframes semBlink { 0%, 92%, 100% { transform: scaleY(1); } 96% { transform: scaleY(0.1); } }
         @keyframes semLeafSway { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(5deg); } }
-        .semillita--happy .semillita-bob { animation: semHappyJump 0.6s ease-in-out 3; }
+        .semillita--happy .semillita-body { animation: semHappyJump 0.6s ease-in-out 3; }
         .semillita--happy .semillita-eye { animation: none; }
         .semillita--happy .eye-normal { display: none; }
         .semillita--happy .eye-happy { display: block !important; }
         .semillita--happy .mouth-normal { display: none; }
         .semillita--happy .mouth-happy { display: block !important; }
-        @keyframes semHappyJump { 0%, 100% { transform: translateY(0) scale(1); } 40% { transform: translateY(-16px) scale(1.06, 0.94); } 70% { transform: translateY(2px) scale(0.96, 1.04); } }
-        .semillita--thinking .semillita-bob { animation: semThinkTilt 2.2s ease-in-out infinite; }
+        @keyframes semHappyJump { 0%, 100% { transform: translateY(0) scale(1); } 40% { transform: translateY(-14px) scale(1.05, 0.95); } 70% { transform: translateY(2px) scale(0.97, 1.03); } }
+        .semillita--thinking .semillita-body { animation: semThinkTilt 2.2s ease-in-out infinite; }
         .semillita--thinking .semillita-leaf { animation: semThinkLeaf 1.2s ease-in-out infinite; }
-        @keyframes semThinkTilt { 0%, 100% { transform: rotate(0deg) translateY(0); } 50% { transform: rotate(6deg) translateY(-4px); } }
+        @keyframes semThinkTilt { 0%, 100% { transform: rotate(0deg) translateY(0); } 50% { transform: rotate(5deg) translateY(-4px); } }
         @keyframes semThinkLeaf { 0%, 100% { transform: rotate(8deg); } 50% { transform: rotate(-6deg); } }
       </style>
     </defs>
-    <g class="semillita-bob">
+    <g class="semillita-body">
       <g class="semillita-feet" stroke="#1E5641" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round" fill="none">
         <path d="M 50 128 L 57 137 L 64 128" />
         <path d="M 74 128 L 81 137 L 88 128" />
@@ -152,14 +152,18 @@
       'navIcon-inicio': 'inicio',
       'navIcon-ruta': 'ruta',
       'navIcon-juegos': 'juegos',
+      'navIcon-misiones': 'misiones',
       'navIcon-diccionario': 'diccionario',
+      'navIcon-album': 'album',
       'navIcon-perfil': 'perfil',
 
       // Bottom nav mobile
       'mobIcon-inicio': 'inicio',
       'mobIcon-ruta': 'ruta',
       'mobIcon-juegos': 'juegos',
+      'mobIcon-misiones': 'misiones',
       'mobIcon-diccionario': 'diccionario',
+      'mobIcon-album': 'album',
       'mobIcon-perfil': 'perfil',
 
       // Topbar
@@ -268,7 +272,9 @@
       inicio: $('viewInicio'),
       ruta: $('viewRuta'),
       juegos: $('viewJuegos'),
+      misiones: $('viewMisiones'),
       diccionario: $('viewDiccionario'),
+      album: $('viewAlbum'),
       perfil: $('viewPerfil')
     };
 
@@ -289,9 +295,20 @@
       case 'juegos':
         renderGamesView();
         break;
+      case 'misiones':
+        renderMissionsView();
+        break;
       case 'diccionario':
+        if (!state.exploredDictionary) {
+          state.exploredDictionary = true;
+          StateManager.save(state, state.profileRole);
+          checkAndUnlockBadges();
+        }
         renderLexiconView();
         renderContrastView();
+        break;
+      case 'album':
+        renderAlbumView();
         break;
       case 'perfil':
         renderProfileView();
@@ -467,10 +484,10 @@
     }
 
     // 2. Insignias desbloqueadas
-    checkAndUnlockBadges();
+    checkAndUnlockBadges(true);
     const badgesEl = $('homeCompletedBadges');
     if (badgesEl) {
-      badgesEl.textContent = `${(state.completedBadges || []).length} / 6`;
+      badgesEl.textContent = `${(state.completedBadges || []).length} / ${(ALBUM_BADGES_DATA || []).length || 10}`;
     }
 
     // 3. Vocablos aportados en Taller
@@ -512,50 +529,105 @@
 
   /**
    * ==========================================================================
-   * 5. VISTA 2: RUTA (PISOS DEL SABER EN TEJIDO ZIGZAG)
+   * 5. VISTA 2: RUTA EN PAISAJE VERTICAL CONTINUO (6 PISOS CONECTADOS)
    * ==========================================================================
    */
+  function getStageSilhouetteSVG(stageId) {
+    if (stageId === 1) {
+      return `<svg class="stage-bg-silhouette" viewBox="0 0 800 240" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M 0 160 Q 100 140 200 160 T 400 160 T 600 160 T 800 160 L 800 240 L 0 240 Z" fill="#1B5E43" />
+        <path d="M 0 185 Q 120 165 240 185 T 480 185 T 720 185 T 800 185 L 800 240 L 0 240 Z" fill="#2B7A78" />
+        <path d="M 90 190 L 96 140 M 96 140 Q 75 125 60 135 M 96 140 Q 90 120 96 110 M 96 140 Q 115 125 130 135" stroke="#1B5E43" stroke-width="3" fill="none" stroke-linecap="round" />
+        <path d="M 710 195 L 716 145 M 716 145 Q 695 130 680 140 M 716 145 Q 710 125 716 115 M 716 145 Q 735 130 750 140" stroke="#1B5E43" stroke-width="3" fill="none" stroke-linecap="round" />
+      </svg>`;
+    }
+    if (stageId === 2) {
+      return `<svg class="stage-bg-silhouette" viewBox="0 0 800 240" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M 120 0 L 150 240 M 135 0 L 165 240 M 150 0 L 180 240" stroke="#2B7A78" stroke-width="4" stroke-dasharray="12 8" fill="none" />
+        <path d="M 0 210 Q 150 180 300 210 T 600 210 T 800 210 L 800 240 L 0 240 Z" fill="#1E5641" />
+        <path d="M 680 230 C 650 170 730 140 760 190 Z" fill="#27765B" />
+        <path d="M 60 230 C 30 170 110 140 140 190 Z" fill="#27765B" />
+      </svg>`;
+    }
+    if (stageId === 3) {
+      return `<svg class="stage-bg-silhouette" viewBox="0 0 800 240" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M 0 140 L 200 100 L 400 130 L 600 90 L 800 120 L 800 240 L 0 240 Z" fill="#1E5641" />
+        <path d="M 80 170 H 260 M 120 190 H 320 M 160 210 H 380" stroke="#8C5A32" stroke-width="3" stroke-linecap="round" />
+        <path d="M 520 80 Q 550 65 580 80 Q 610 65 640 80 H 520 Z" fill="#FFFFFF" />
+      </svg>`;
+    }
+    if (stageId === 4) {
+      return `<svg class="stage-bg-silhouette" viewBox="0 0 800 240" preserveAspectRatio="none" aria-hidden="true">
+        <g stroke="#D99B38" stroke-width="2.5" fill="none">
+          <polygon points="100,60 130,90 100,120 70,90" />
+          <polygon points="100,72 118,90 100,108 82,90" />
+          <polygon points="700,60 730,90 700,120 670,90" />
+          <polygon points="700,72 718,90 700,108 682,90" />
+        </g>
+        <path d="M 360 220 C 360 170 440 170 440 220 Z" fill="#8C5A32" />
+      </svg>`;
+    }
+    if (stageId === 5) {
+      return `<svg class="stage-bg-silhouette" viewBox="0 0 800 240" preserveAspectRatio="none" aria-hidden="true">
+        <ellipse cx="400" cy="200" rx="180" ry="26" fill="#2B7A78" />
+        <g stroke="#1E5641" stroke-width="2.5" fill="#4B6354">
+          <path d="M 120 220 L 120 160 M 120 160 Q 100 145 90 155 M 120 160 Q 120 135 120 130 M 120 160 Q 140 145 150 155" />
+          <path d="M 680 220 L 680 150 M 680 150 Q 660 135 650 145 M 680 150 Q 680 125 680 120 M 680 150 Q 700 135 710 145" />
+        </g>
+      </svg>`;
+    }
+    return `<svg class="stage-bg-silhouette" viewBox="0 0 800 240" preserveAspectRatio="none" aria-hidden="true">
+      <polygon points="260,240 400,60 540,240" fill="#E2EDF5" />
+      <polygon points="340,110 400,60 460,110 430,130 400,115 370,130" fill="#FFFFFF" />
+      <polygon points="120,240 240,90 360,240" fill="#D3E4EE" />
+      <polygon points="190,130 240,90 290,130 265,145 240,135 215,145" fill="#FFFFFF" />
+      <circle cx="400" cy="45" r="24" fill="#D99B38" />
+    </svg>`;
+  }
+
   function renderRouteView() {
     const container = $('routeStagesContainer');
     if (!container) return;
 
-    let html = '';
+    let html = '<div class="route-continuous-canvas" id="routeContinuousCanvas">';
 
-    TERRITORIAL_STAGES.forEach((stage) => {
+    TERRITORIAL_STAGES.forEach((stage, sIdx) => {
       const stageLevels = stage.levels || [];
       const completedCount = stageLevels.filter((l) => state.completedLevels.includes(l.id)).length;
+      const stageTitle = stage.name || stage.titleEs || 'Territorio Sagrado';
+      const stageEco = stage.ecosystem || stage.biomeDescription || '';
 
       html += `
-        <article class="piso-container" id="stage-card-${stage.id}">
-          <div class="piso-header">
+        <section class="piso-section piso-stage-${stage.id}" id="stage-section-${stage.id}" data-stage="${stage.id}">
+          ${getStageSilhouetteSVG(stage.id)}
+
+          <div class="piso-header-seamless">
             <div class="piso-title-wrap">
               <div class="piso-badge">
                 ${getSVGIcon(stage.iconKey || 'ruta')}
               </div>
               <div>
-                <h3>Piso ${stage.id}: ${escapeHTML(stage.name)}</h3>
-                <span class="piso-ecosystem">${escapeHTML(stage.ecosystem)} · ${escapeHTML(stage.altitude)}</span>
+                <h3 class="piso-full-title">Piso ${stage.id}: ${escapeHTML(stageTitle)}</h3>
+                <span class="piso-ecosystem-tag">${escapeHTML(stage.altitude || '')} · ${escapeHTML(stageEco)}</span>
               </div>
             </div>
             <div class="piso-progress-pill">
-              ${completedCount} de ${stageLevels.length} completados
+              ${completedCount} de ${stageLevels.length} pasos tejidos
             </div>
           </div>
 
-          <!-- Cuadricula en Zigzag con Hilos SVG de Telar -->
           <div class="zigzag-loom-area">
-            <!-- Trazado SVG escalonado entre los 4 nodos -->
             <svg class="zigzag-svg-threads" viewBox="0 0 800 160" preserveAspectRatio="none" aria-hidden="true">
-              <path class="thread-line ${completedCount >= 1 ? 'active' : ''}" d="M 100 80 L 300 102" />
-              <path class="thread-line ${completedCount >= 2 ? 'active' : ''}" d="M 300 102 L 500 80" />
-              <path class="thread-line ${completedCount >= 3 ? 'active' : ''}" d="M 500 80 L 700 102" />
+              <path class="thread-line ${state.completedLevels.includes(`${stage.id}-1`) ? 'active' : ''}" d="M 100 80 L 300 102" />
+              <path class="thread-line ${state.completedLevels.includes(`${stage.id}-2`) ? 'active' : ''}" d="M 300 102 L 500 80" />
+              <path class="thread-line ${state.completedLevels.includes(`${stage.id}-3`) ? 'active' : ''}" d="M 500 80 L 700 102" />
             </svg>
 
             <div class="zigzag-nodes-grid">
               ${stageLevels.map((lvl, idx) => {
                 const isCompleted = state.completedLevels.includes(lvl.id);
-                // Desbloqueado si es el primer nivel o el anterior esta completo
-                const isUnlocked = isCompleted || idx === 0 || (idx > 0 && state.completedLevels.includes(stageLevels[idx - 1].id)) || (stage.id > 1 && idx === 0 && isPreviousStageComplete(stage.id));
+                const prevLevelId = idx > 0 ? stageLevels[idx - 1].id : (stage.id > 1 ? `${stage.id - 1}-4` : null);
+                const isUnlocked = isCompleted || !prevLevelId || state.completedLevels.includes(prevLevelId);
                 const isCurrent = isUnlocked && !isCompleted;
 
                 let stateClass = 'locked';
@@ -572,12 +644,14 @@
                 return `
                   <div class="level-node-wrap">
                     <button class="level-diamond-btn ${stateClass}"
+                            type="button"
                             data-level-id="${lvl.id}"
-                            ${isUnlocked ? '' : 'disabled'}
-                            aria-label="Nivel ${lvl.id}: ${escapeHTML(lvl.title)}">
+                            data-locked="${!isUnlocked}"
+                            data-prev-id="${prevLevelId || ''}"
+                            aria-label="Nivel ${lvl.id}: ${escapeHTML(lvl.title)} (${isCompleted ? 'Completado' : isUnlocked ? 'Disponible' : 'Bloqueado'})">
                       <div class="diamond-inner-content">
                         ${iconContent}
-                        <span style="font-size: 0.68rem; font-weight: 800; margin-top: 2px;">${lvl.id}</span>
+                        <span class="diamond-level-num">${lvl.id}</span>
                       </div>
                     </button>
                     <span class="level-node-title">${escapeHTML(lvl.title)}</span>
@@ -586,26 +660,54 @@
               }).join('')}
             </div>
           </div>
-        </article>
+        </section>
       `;
+
+      // Conector puente SVG entre pisos consecutivos (1-4 -> 2-1 ... 5-4 -> 6-1)
+      if (stage.id < 6) {
+        const lastLevelOfStage = `${stage.id}-4`;
+        const isBridgeActive = state.completedLevels.includes(lastLevelOfStage);
+        const nextStage = TERRITORIAL_STAGES[sIdx + 1];
+        const nextName = nextStage ? (nextStage.name || nextStage.titleEs) : '';
+        const nextAlt = nextStage ? (nextStage.altitude || '') : '';
+
+        html += `
+          <div class="piso-bridge-connector" data-bridge="${stage.id}-${stage.id + 1}">
+            <svg class="bridge-thread-svg" viewBox="0 0 800 70" preserveAspectRatio="none" aria-hidden="true">
+              <path class="thread-bridge-line ${isBridgeActive ? 'active' : ''}" d="M 700 0 C 700 38, 100 32, 100 70" />
+            </svg>
+            <div class="altitude-divider-pill">
+              <span>Ascenso a Piso ${stage.id + 1}: ${escapeHTML(nextName)} (${escapeHTML(nextAlt)})</span>
+            </div>
+          </div>
+        `;
+      }
     });
 
+    html += '</div>';
     container.innerHTML = html;
 
-    // Vincular clic en nodos
+    // Vincular clic real en TODOS los 24 botones de nivel (1-1 al 6-4)
     container.querySelectorAll('[data-level-id]').forEach((btn) => {
-      btn.onclick = () => {
+      btn.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const levelId = btn.dataset.levelId;
+        const isLocked = btn.dataset.locked === 'true';
+        const prevId = btn.dataset.prevId;
+
+        if (isLocked) {
+          SoundEngine.playErrorSound();
+          showToast(prevId
+            ? `Completa primero el nivel ${prevId} para tejer este paso`
+            : 'Completa primero el nivel anterior para tejer este paso');
+          return;
+        }
+
         SoundEngine.playClickSound();
-        openTerritorialLevel(btn.dataset.levelId);
+        openTerritorialLevel(levelId);
       };
     });
-  }
-
-  function isPreviousStageComplete(currentStageId) {
-    if (currentStageId <= 1) return true;
-    const prevStage = TERRITORIAL_STAGES.find((s) => s.id === currentStageId - 1);
-    if (!prevStage) return true;
-    return prevStage.levels.every((l) => state.completedLevels.includes(l.id));
   }
 
   /**
@@ -665,6 +767,10 @@
 
     const isComunidad = state.profileRole === 'comunidad';
 
+    const syllablesList = Array.isArray(d.syllables)
+      ? d.syllables
+      : String(d.syllables || '').split(/[·/\s]+/).filter(Boolean);
+
     return `
       <div class="modal-header">
         <div>
@@ -672,7 +778,7 @@
             Fase 1 · Descubrimiento y Andamiaje
           </span>
           <h3 style="font-size: 1.15rem; font-weight: 800; margin-top: 4px;">
-            Nivel ${level.id} · ${escapeHTML(stage ? stage.name : 'Sierra Nevada')}
+            Nivel ${level.id} · ${escapeHTML(stage ? (stage.name || stage.titleEs) : 'Sierra Nevada')}
           </h3>
         </div>
         <button class="icon-action-btn" id="modalCloseX" aria-label="Cerrar modal">
@@ -687,7 +793,7 @@
 
           <!-- Silabas separadas -->
           <div class="syllables-row">
-            ${(d.syllables || []).map((s) => `<span class="syllable-chip">${escapeHTML(s)}</span>`).join('')}
+            ${syllablesList.map((s) => `<span class="syllable-chip">${escapeHTML(s)}</span>`).join('')}
           </div>
 
           <button class="btn-secondary btn-sm" id="btnPlayDiscoveryAudio" style="margin: 0 auto 10px;">
@@ -727,9 +833,9 @@
     let challengeBodyHTML = '';
     let instructionText = isComunidad && level.communityInstruction
       ? level.communityInstruction
-      : level.instruction;
+      : (level.question || level.instruction || 'Completa este reto territorial:');
 
-    // Renderizar segun el tipo de mecanica
+    // Renderizar segun los 4 tipos de mecanica de data-iku.js
     if (level.type === 'audio-assoc') {
       challengeBodyHTML = `
         <div style="text-align: center; margin-bottom: 18px;">
@@ -747,9 +853,10 @@
         </div>
       `;
     } else if (level.type === 'territorial-case') {
+      const caseContent = level.caseDescription || level.caseText || '';
       challengeBodyHTML = `
-        <div style="background: var(--bg-canvas); border-left: 4px solid var(--accent-earth); padding: 14px; border-radius: var(--radius-sm); margin-bottom: 18px; font-size: 0.92rem;">
-          ${escapeHTML(level.caseText || '')}
+        <div style="background: var(--bg-canvas); border-left: 4px solid var(--accent-earth); padding: 14px; border-radius: var(--radius-sm); margin-bottom: 18px; font-size: 0.92rem; line-height: 1.5;">
+          ${escapeHTML(caseContent)}
         </div>
         <div class="challenge-options-list">
           ${(level.options || []).map((opt, i) => `
@@ -759,15 +866,44 @@
           `).join('')}
         </div>
       `;
-    } else {
-      // Opciones estandar / morfosintaxis
+    } else if (level.type === 'syntax-build') {
       challengeBodyHTML = `
-        <div class="challenge-options-list">
-          ${(level.options || []).map((opt, i) => `
-            <button class="challenge-option-btn" data-option-index="${i}">
-              ${escapeHTML(opt.text)}
-            </button>
-          `).join('')}
+        <div style="background: var(--primary-soft); border-radius: var(--radius-md); padding: 12px 16px; margin-bottom: 14px; font-size: 0.9rem; color: var(--primary-forest);">
+          <strong>Sentido esperado:</strong> "${escapeHTML(level.targetMeaning || '')}"
+        </div>
+        <strong style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 6px;">Tu frase tejida:</strong>
+        <div class="tokens-slot-area" id="challengeSyntaxSlot"></div>
+        <strong style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 6px;">Bloques disponibles (toca para ordenar):</strong>
+        <div id="challengeSyntaxPool" style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px;"></div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <button class="btn-forest" id="btnVerifyChallengeSyntax">Comprobar Tejido</button>
+          <button class="btn-secondary btn-sm" id="btnResetChallengeSyntax">Reiniciar</button>
+        </div>
+      `;
+    } else if (level.type === 'concept-match') {
+      const pairs = level.pairs || [];
+      const leftItems = pairs.map((p, i) => ({ text: p.left, i })).sort(() => Math.random() - 0.5);
+      const rightItems = pairs.map((p, i) => ({ text: p.right, i })).sort(() => Math.random() - 0.5);
+
+      challengeBodyHTML = `
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
+          <div id="challengeMatchLeftCol" style="display: flex; flex-direction: column; gap: 10px;">
+            ${leftItems.map((item) => `
+              <button class="challenge-option-btn" data-match-left="${item.i}" style="padding: 11px 14px; font-size: 0.86rem;">
+                ${escapeHTML(item.text)}
+              </button>
+            `).join('')}
+          </div>
+          <div id="challengeMatchRightCol" style="display: flex; flex-direction: column; gap: 10px;">
+            ${rightItems.map((item) => `
+              <button class="challenge-option-btn" data-match-right="${item.i}" style="padding: 11px 14px; font-size: 0.86rem;">
+                ${escapeHTML(item.text)}
+              </button>
+            `).join('')}
+          </div>
+        </div>
+        <div id="challengeMatchCounter" style="font-size: 0.84rem; color: var(--text-muted); font-weight: 600;">
+          Parejas armonizadas: 0 de ${pairs.length}
         </div>
       `;
     }
@@ -776,7 +912,7 @@
       <div class="modal-header">
         <div>
           <span class="hero-tag" style="background: var(--accent-ochre-light); color: var(--accent-ochre-dark);">
-            Fase 2 · Reto de Aprendizaje
+            Fase 2 · Reto de Aprendizaje (Nivel ${escapeHTML(level.id)})
           </span>
           <h3 style="font-size: 1.15rem; font-weight: 800; margin-top: 4px;">
             ${escapeHTML(level.title)}
@@ -795,7 +931,6 @@
 
         ${challengeBodyHTML}
 
-        <!-- Boton de Pistas Progresivas -->
         <div style="text-align: center; margin-top: 14px;">
           <button class="btn-request-hint" id="btnRequestHint" style="display: none;">
             ${getSVGIcon('pista')}
@@ -810,13 +945,11 @@
 
     openModal(html);
 
-    // Boton para volver a la ficha de estudio
     const btnBack = $('btnBackToStudy');
     if (btnBack) {
       btnBack.onclick = () => openTerritorialLevel(level.id);
     }
 
-    // Audio en el reto
     const btnAudio = $('btnPlayChallengeAudio');
     if (btnAudio) {
       btnAudio.onclick = () => {
@@ -825,8 +958,148 @@
       };
     }
 
-    // Configurar logica de opciones
-    initChallengeOptionsLogic(level);
+    if (level.type === 'syntax-build') {
+      initSyntaxChallengeLogic(level);
+    } else if (level.type === 'concept-match') {
+      initMatchChallengeLogic(level);
+    } else {
+      initChallengeOptionsLogic(level);
+    }
+  }
+
+  function initSyntaxChallengeLogic(level) {
+    const tokensSource = (state.profileRole === 'comunidad' || !level.esTokens)
+      ? level.ikuTokens
+      : level.esTokens;
+    const indexed = (tokensSource || []).map((text, idx) => ({ text, idx }));
+    let pool = [...indexed].sort(() => Math.random() - 0.5);
+    let chosen = [];
+
+    const slotEl = $('challengeSyntaxSlot');
+    const poolEl = $('challengeSyntaxPool');
+    const hintBtn = $('btnRequestHint');
+
+    function renderTokens() {
+      if (!slotEl || !poolEl) return;
+      slotEl.innerHTML = chosen.length === 0
+        ? '<span style="color: #9AAEA4; font-size: 0.84rem;">Toca los bloques de abajo en orden...</span>'
+        : chosen.map((item, pos) => `<span class="word-token-chip" data-remove-syn="${pos}">${escapeHTML(item.text)}</span>`).join('');
+
+      poolEl.innerHTML = pool.map((item, pos) => `
+        <button type="button" class="word-token-chip" data-pick-syn="${pos}">${escapeHTML(item.text)}</button>
+      `).join('');
+
+      poolEl.querySelectorAll('[data-pick-syn]').forEach((btn) => {
+        btn.onclick = () => {
+          const pos = Number(btn.dataset.pickSyn);
+          chosen.push(pool.splice(pos, 1)[0]);
+          SoundEngine.playClickSound();
+          renderTokens();
+        };
+      });
+
+      slotEl.querySelectorAll('[data-remove-syn]').forEach((chip) => {
+        chip.onclick = () => {
+          const pos = Number(chip.dataset.removeSyn);
+          pool.push(chosen.splice(pos, 1)[0]);
+          SoundEngine.playClickSound();
+          renderTokens();
+        };
+      });
+    }
+
+    renderTokens();
+
+    const btnReset = $('btnResetChallengeSyntax');
+    if (btnReset) {
+      btnReset.onclick = () => {
+        pool = [...indexed].sort(() => Math.random() - 0.5);
+        chosen = [];
+        renderTokens();
+      };
+    }
+
+    const btnVerify = $('btnVerifyChallengeSyntax');
+    if (btnVerify) {
+      btnVerify.onclick = () => {
+        const expected = level.correctOrder || indexed.map((x) => x.idx);
+        const isCorrect = chosen.length === expected.length && chosen.every((c, i) => c.idx === expected[i]);
+        if (isCorrect) {
+          SoundEngine.playSuccessSound();
+          setSemillitaHappy();
+          launchCelebrationConfetti();
+          showChallengeFeedback(`¡Frase armonizada! ${level.culturalNote || ''}`, true);
+          completeCurrentLevel(level);
+        } else {
+          SoundEngine.playErrorSound();
+          showChallengeFeedback('El orden de los bloques aun no coincide. Revisa el sentido y vuelve a intentar.', false);
+          if (hintBtn) {
+            hintBtn.style.display = 'inline-flex';
+            initHintSystem(level);
+          }
+        }
+      };
+    }
+  }
+
+  function initMatchChallengeLogic(level) {
+    const leftBtns = $$('#challengeMatchLeftCol [data-match-left]');
+    const rightBtns = $$('#challengeMatchRightCol [data-match-right]');
+    const counterEl = $('challengeMatchCounter');
+    const hintBtn = $('btnRequestHint');
+
+    let selectedLeft = null;
+    let matchedCount = 0;
+    const total = (level.pairs || []).length;
+
+    leftBtns.forEach((btn) => {
+      btn.onclick = () => {
+        leftBtns.forEach((b) => { if (!b.disabled) b.classList.remove('correct'); });
+        selectedLeft = Number(btn.dataset.matchLeft);
+        btn.classList.add('correct');
+        SoundEngine.playClickSound();
+      };
+    });
+
+    rightBtns.forEach((btn) => {
+      btn.onclick = () => {
+        if (selectedLeft === null) {
+          showChallengeFeedback('Primero selecciona un concepto de la columna izquierda.', false);
+          return;
+        }
+        const rightIdx = Number(btn.dataset.matchRight);
+        if (selectedLeft === rightIdx) {
+          const leftMatch = document.querySelector(`[data-match-left="${selectedLeft}"]`);
+          if (leftMatch) {
+            leftMatch.disabled = true;
+            leftMatch.classList.add('correct');
+          }
+          btn.disabled = true;
+          btn.classList.add('correct');
+          selectedLeft = null;
+          matchedCount++;
+          SoundEngine.playSuccessSound();
+
+          if (counterEl) counterEl.textContent = `Parejas armonizadas: ${matchedCount} de ${total}`;
+
+          if (matchedCount === total) {
+            setSemillitaHappy();
+            launchCelebrationConfetti();
+            showChallengeFeedback(`¡Emparejamiento completado! ${level.culturalNote || ''}`, true);
+            completeCurrentLevel(level);
+          }
+        } else {
+          btn.classList.add('wrong');
+          SoundEngine.playErrorSound();
+          showChallengeFeedback('Esa correspondencia no coincide. Intenta otra pareja.', false);
+          if (hintBtn) {
+            hintBtn.style.display = 'inline-flex';
+            initHintSystem(level);
+          }
+          setTimeout(() => btn.classList.remove('wrong'), 900);
+        }
+      };
+    });
   }
 
   function initChallengeOptionsLogic(level) {
@@ -962,19 +1235,37 @@
     }, 700);
   }
 
-  function checkAndUnlockBadges() {
+  function checkAndUnlockBadges(silent = false) {
     if (!state.completedBadges) state.completedBadges = [];
+    const newlyUnlocked = [];
 
-    TERRITORIAL_STAGES.forEach((stage) => {
-      const allLevelsDone = stage.levels.every((l) => state.completedLevels.includes(l.id));
-      const badgeId = `badge-stage-${stage.id}`;
+    (ALBUM_BADGES_DATA || []).forEach((badge) => {
+      let earned = false;
+      if (badge.type === 'stage') {
+        const stage = TERRITORIAL_STAGES.find((s) => s.id === badge.stageRequired);
+        if (stage && stage.levels.every((l) => state.completedLevels.includes(l.id))) {
+          earned = true;
+        }
+      } else if (badge.type === 'missions') {
+        earned = (state.completedMissions || []).length >= (badge.countRequired || 1);
+      } else if (badge.type === 'lexicon') {
+        earned = !!state.exploredDictionary || (state.customWords || []).length > 0;
+      } else if (badge.type === 'games') {
+        earned = (state.completedGames || 0) >= (badge.countRequired || 1);
+      }
 
-      if (allLevelsDone && !state.completedBadges.includes(badgeId)) {
-        state.completedBadges.push(badgeId);
-        StateManager.save(state, state.profileRole);
-        showToast(`¡Has desbloqueado la insignia: Piso ${stage.id} de la Sierra!`);
+      if (earned && !state.completedBadges.includes(badge.id)) {
+        state.completedBadges.push(badge.id);
+        newlyUnlocked.push(badge.title);
       }
     });
+
+    if (newlyUnlocked.length > 0) {
+      StateManager.save(state, state.profileRole);
+      if (!silent) {
+        showToast(`¡Insignia desbloqueada: ${newlyUnlocked[0]}!`);
+      }
+    }
   }
 
   /**
@@ -996,6 +1287,14 @@
     });
 
     renderActiveGamePanel();
+  }
+
+  function recordMinigameWin() {
+    state.completedGames = (state.completedGames || 0) + 1;
+    state.points = (state.points || 0) + 10;
+    StateManager.save(state, state.profileRole);
+    updatePointsDisplay();
+    checkAndUnlockBadges();
   }
 
   function renderActiveGamePanel() {
@@ -1053,6 +1352,7 @@
           btn.classList.add('correct');
           SoundEngine.playSuccessSound();
           setSemillitaHappy();
+          recordMinigameWin();
           fb.innerHTML = `
             <div style="background: var(--status-success-bg); color: var(--status-success); border-radius: var(--radius-md); padding: 14px; font-weight: 700; margin-top: 14px;">
               ¡Correcto! ${escapeHTML(item.ikuWord)}: ${escapeHTML(item.esWord)}.
@@ -1136,6 +1436,7 @@
             if (matchedCount === 6) {
               setSemillitaHappy();
               launchCelebrationConfetti();
+              recordMinigameWin();
               $('memoryGameFeedback').innerHTML = `
                 <div style="background: var(--status-success-bg); color: var(--status-success); border-radius: var(--radius-md); padding: 14px; font-weight: 700;">
                   ¡Completaste todas las parejas del territorio!
@@ -1249,6 +1550,7 @@
           if (isCorrect) {
             SoundEngine.playSuccessSound();
             setSemillitaHappy();
+            recordMinigameWin();
             fb.innerHTML = `
               <div style="background: var(--status-success-bg); color: var(--status-success); border-radius: var(--radius-md); padding: 14px; font-weight: 700;">
                 ¡Frase tejida con armonia!
@@ -1306,6 +1608,7 @@
           btn.classList.add('correct');
           SoundEngine.playSuccessSound();
           setSemillitaHappy();
+          recordMinigameWin();
           fb.innerHTML = `
             <div style="background: var(--status-success-bg); color: var(--status-success); border-radius: var(--radius-md); padding: 14px; font-weight: 700; margin-top: 14px;">
               ¡Respuesta sabia!
@@ -1474,11 +1777,128 @@
 
   /**
    * ==========================================================================
-   * 9. VISTA 5: ALBUM, PERFIL Y SOBERANIA DE DATOS (HABEAS DATA)
+   * 8B. VISTA 4: MISIONES EN EL TERRITORIO (CON PROGRESO Y RECOMPENSAS REALES)
    * ==========================================================================
    */
-  function renderProfileView() {
+  function renderMissionsView() {
+    const gridEl = $('missionsGridContainer');
+    const summaryEl = $('missionsProgressSummary');
+    const pointsEl = $('missionsPointsSummary');
+    const fillEl = $('missionsProgressFill');
+    if (!gridEl) return;
+
+    const missions = TERRITORIAL_MISSIONS || [];
+    const completed = state.completedMissions || [];
+    const earnedPts = missions
+      .filter((m) => completed.includes(m.id))
+      .reduce((sum, m) => sum + (m.points || 25), 0);
+    const pct = missions.length > 0 ? Math.round((completed.length / missions.length) * 100) : 0;
+
+    if (summaryEl) summaryEl.textContent = `${completed.length} de ${missions.length} misiones completadas`;
+    if (pointsEl) pointsEl.textContent = `+${earnedPts} pts ganados`;
+    if (fillEl) fillEl.style.width = `${pct}%`;
+
+    gridEl.innerHTML = missions.map((m, idx) => {
+      const isDone = completed.includes(m.id);
+      const pts = m.points || 25;
+
+      return `
+        <article class="mission-card ${isDone ? 'completed' : ''}">
+          <div>
+            <div class="mission-tag-row">
+              <span class="mission-badge-tag">Mision ${idx + 1} · Piso ${m.stageRef || 1}</span>
+              ${isDone ? `<span class="mission-done-pill">${getSVGIcon('check')} Realizada</span>` : `<span style="font-size: 0.78rem; font-weight: 800; color: var(--accent-ochre-dark);">+${pts} pts</span>`}
+            </div>
+
+            <div class="mission-title-row" style="margin-top: 12px;">
+              <div class="mission-icon-box">
+                ${getSVGIcon(m.iconKey || 'misiones')}
+              </div>
+              <h3 style="font-size: 1.05rem; font-weight: 800; color: var(--text-main);">${escapeHTML(m.title)}</h3>
+            </div>
+
+            <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin: 12px 0;">
+              ${escapeHTML(m.desc)}
+            </p>
+
+            <div class="mission-reflection-box">
+              <strong>Reflexion:</strong> ${escapeHTML(m.reflection)}
+            </div>
+          </div>
+
+          <button type="button"
+                  class="${isDone ? 'btn-secondary' : 'btn-primary'}"
+                  data-complete-mission="${m.id}"
+                  style="width: 100%; ${isDone ? 'opacity: 0.78;' : ''}">
+            ${isDone ? `${getSVGIcon('check')} Mision completada` : `Marcar como realizada (+${pts} pts)`}
+          </button>
+        </article>
+      `;
+    }).join('');
+
+    gridEl.querySelectorAll('[data-complete-mission]').forEach((btn) => {
+      btn.onclick = () => {
+        const mId = btn.dataset.completeMission;
+        if (!state.completedMissions) state.completedMissions = [];
+
+        if (state.completedMissions.includes(mId)) {
+          showToast('Esta mision territorial ya fue registrada en tu progreso.');
+          return;
+        }
+
+        const mission = missions.find((x) => x.id === mId);
+        const pts = (mission && mission.points) || 25;
+
+        state.completedMissions.push(mId);
+        state.points = (state.points || 0) + pts;
+        StateManager.save(state, state.profileRole);
+
+        SoundEngine.playSuccessSound();
+        setSemillitaHappy();
+        launchCelebrationConfetti();
+        updatePointsDisplay();
+        checkAndUnlockBadges();
+        renderMissionsView();
+        renderHomeView();
+        showToast(`¡Mision realizada! Sumaste +${pts} puntos al marcador.`);
+      };
+    });
+  }
+
+  /**
+   * ==========================================================================
+   * 9. VISTA 6 & 7: ALBUM DE INSIGNIAS + PERFIL Y GOBERNANZA (HABEAS DATA)
+   * ==========================================================================
+   */
+  function renderAlbumView() {
+    checkAndUnlockBadges(true);
+    const badges = ALBUM_BADGES_DATA || [];
+    const unlockedIds = state.completedBadges || [];
+    const earnedCount = badges.filter((b) => unlockedIds.includes(b.id)).length;
+    const pct = badges.length > 0 ? Math.round((earnedCount / badges.length) * 100) : 0;
+
+    const summaryEl = $('albumProgressSummary');
+    const percentEl = $('albumProgressPercent');
+    const fillEl = $('albumProgressFill');
+    if (summaryEl) summaryEl.textContent = `${earnedCount} / ${badges.length} insignias conseguidas`;
+    if (percentEl) percentEl.textContent = `${pct}% completado`;
+    if (fillEl) fillEl.style.width = `${pct}%`;
+
     renderBadgesGallery();
+  }
+
+  function renderProfileView() {
+    updateProfileUI(state.profileRole || 'visitante');
+    const pPts = $('profStatPoints');
+    const pLvls = $('profStatLevels');
+    const pMis = $('profStatMissions');
+    const pBdg = $('profStatBadges');
+
+    if (pPts) pPts.textContent = state.points || 0;
+    if (pLvls) pLvls.textContent = `${(state.completedLevels || []).length} / 24`;
+    if (pMis) pMis.textContent = `${(state.completedMissions || []).length} / ${(TERRITORIAL_MISSIONS || []).length || 6}`;
+    if (pBdg) pBdg.textContent = `${(state.completedBadges || []).length} / ${(ALBUM_BADGES_DATA || []).length || 10}`;
+
     renderCustomWordsList();
     setupHabeasDataEvents();
   }
@@ -1487,14 +1907,15 @@
     const container = $('badgesGalleryContainer');
     if (!container) return;
 
-    checkAndUnlockBadges();
     const badges = ALBUM_BADGES_DATA || [];
+    const unlockedIds = state.completedBadges || [];
 
     container.innerHTML = badges.map((b) => {
-      const isUnlocked = (state.completedBadges || []).includes(`badge-stage-${b.stageRequired}`);
+      const isUnlocked = unlockedIds.includes(b.id);
 
       return `
-        <div class="badge-card ${isUnlocked ? 'unlocked' : ''}">
+        <div class="badge-card ${isUnlocked ? 'unlocked' : 'locked'}" data-badge-id="${b.id}" role="button" tabindex="0">
+          ${!isUnlocked ? `<span class="badge-lock-corner">${getSVGIcon('candado')}</span>` : ''}
           <div class="badge-icon-disc">
             ${getSVGIcon(b.iconKey || 'medalla')}
           </div>
@@ -1504,17 +1925,56 @@
           <p style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.35; margin-bottom: 8px;">
             ${escapeHTML(b.desc)}
           </p>
-          <div style="font-size: 0.74rem; font-style: italic; color: var(--accent-earth); font-weight: 600;">
-            "${escapeHTML(b.quote)}"
-          </div>
           <div style="margin-top: 10px;">
-            <span class="hero-tag" style="background: ${isUnlocked ? 'var(--status-gold-bg)' : '#E8ECE8'}; color: ${isUnlocked ? 'var(--status-gold)' : '#7C8C82'};">
-              ${isUnlocked ? 'Desbloqueada' : `Piso ${b.stageRequired}`}
+            <span class="hero-tag" style="background: ${isUnlocked ? 'var(--status-gold-bg)' : '#E8ECE8'}; color: ${isUnlocked ? 'var(--accent-ochre-dark)' : '#6E8075'};">
+              ${isUnlocked ? 'Desbloqueada · Ver detalle' : 'Bloqueada · Ver requisito'}
             </span>
           </div>
         </div>
       `;
     }).join('');
+
+    container.querySelectorAll('[data-badge-id]').forEach((card) => {
+      card.onclick = () => {
+        const badge = badges.find((item) => item.id === card.dataset.badgeId);
+        if (!badge) return;
+        const isUnlocked = unlockedIds.includes(badge.id);
+
+        SoundEngine.playClickSound();
+        openModal(`
+          <div class="modal-header">
+            <div>
+              <span class="hero-tag" style="background: ${isUnlocked ? 'var(--status-gold-bg)' : '#E8ECE8'}; color: ${isUnlocked ? 'var(--accent-ochre-dark)' : '#5B6C62'};">
+                ${isUnlocked ? 'Insignia Desbloqueada' : 'Insignia por Desbloquear'}
+              </span>
+              <h3 style="font-size: 1.2rem; font-weight: 800; margin-top: 4px;">${escapeHTML(badge.title)}</h3>
+            </div>
+            <button class="icon-action-btn" id="modalCloseX" aria-label="Cerrar modal">
+              ${getSVGIcon('cerrar')}
+            </button>
+          </div>
+          <div class="modal-body" style="text-align: center;">
+            <div class="badge-icon-disc" style="width: 78px; height: 78px; margin-bottom: 16px; ${isUnlocked ? 'background: var(--accent-ochre-light); color: var(--accent-ochre-dark);' : ''}">
+              ${getSVGIcon(badge.iconKey || 'medalla')}
+            </div>
+            <p style="font-size: 0.95rem; color: var(--text-main); line-height: 1.5; margin-bottom: 14px;">
+              ${escapeHTML(badge.desc)}
+            </p>
+            <div style="font-size: 0.85rem; font-style: italic; color: var(--accent-earth); font-weight: 600; margin-bottom: 18px;">
+              "${escapeHTML(badge.quote)}"
+            </div>
+            <div style="background: ${isUnlocked ? 'var(--status-success-bg)' : 'var(--bg-canvas)'}; border: 1.5px solid ${isUnlocked ? 'var(--status-success)' : 'var(--border-medium)'}; border-radius: var(--radius-md); padding: 14px; text-align: left;">
+              <strong style="display: block; font-size: 0.84rem; color: ${isUnlocked ? 'var(--status-success)' : 'var(--primary-forest)'}; margin-bottom: 4px;">
+                ${isUnlocked ? 'Logro cumplido:' : 'Requisito para conseguirla:'}
+              </strong>
+              <p style="font-size: 0.88rem; color: var(--text-main); margin: 0;">
+                ${escapeHTML(badge.requirement || 'Completa el piso territorial correspondiente en la Ruta.')}
+              </p>
+            </div>
+          </div>
+        `);
+      };
+    });
   }
 
   function setupWorkshopEvents() {

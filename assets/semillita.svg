@@ -23,30 +23,25 @@
       <stop offset="100%" stop-color="#D99B38"/>
     </linearGradient>
 
-    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="3" result="blur"/>
-      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-    </filter>
-
     <style>
       .semillita-svg {
         overflow: visible;
         display: block;
       }
-      .semillita-bob {
+      .semillita-body {
+        transform-origin: center bottom;
         animation: semBob 3s ease-in-out infinite;
-        transform-origin: 70px 115px;
       }
       .semillita-eye {
+        transform-box: fill-box;
         transform-origin: center;
         animation: semBlink 4.5s ease-in-out infinite;
       }
       .semillita-leaf {
-        transform-origin: 52px 35px;
+        transform-origin: 52px 38px;
         animation: semLeafSway 3.6s ease-in-out infinite;
       }
 
-      /* Animaciones de estados */
       @keyframes semBob {
         0%, 100% { transform: translateY(0); }
         50% { transform: translateY(-7px); }
@@ -60,8 +55,8 @@
         50% { transform: rotate(5deg); }
       }
 
-      /* Estado Feliz (Celebracion de acierto) */
-      .semillita--happy .semillita-bob {
+      /* Estado Feliz: todo el grupo semillita-body salta junto */
+      .semillita--happy .semillita-body {
         animation: semHappyJump 0.6s ease-in-out 3;
       }
       .semillita--happy .semillita-eye {
@@ -79,14 +74,17 @@
       .semillita--happy .mouth-happy {
         display: block !important;
       }
+      .semillita--happy .semillita-sparkles {
+        display: block !important;
+      }
       @keyframes semHappyJump {
         0%, 100% { transform: translateY(0) scale(1); }
-        40% { transform: translateY(-16px) scale(1.06, 0.94); }
-        70% { transform: translateY(2px) scale(0.96, 1.04); }
+        40% { transform: translateY(-14px) scale(1.05, 0.95); }
+        70% { transform: translateY(2px) scale(0.97, 1.03); }
       }
 
       /* Estado Reflexivo / Pista */
-      .semillita--thinking .semillita-bob {
+      .semillita--thinking .semillita-body {
         animation: semThinkTilt 2.2s ease-in-out infinite;
       }
       .semillita--thinking .semillita-leaf {
@@ -94,7 +92,7 @@
       }
       @keyframes semThinkTilt {
         0%, 100% { transform: rotate(0deg) translateY(0); }
-        50% { transform: rotate(6deg) translateY(-4px); }
+        50% { transform: rotate(5deg) translateY(-4px); }
       }
       @keyframes semThinkLeaf {
         0%, 100% { transform: rotate(8deg); }
@@ -103,28 +101,26 @@
     </style>
   </defs>
 
-  <g class="semillita-bob">
-    <!-- Patitas inferiores en V estilizadas (conservando la anatomia original) -->
+  <!-- Grupo contenedor unico: cuerpo, hoja, patitas y rostro se mueven juntos -->
+  <g class="semillita-body">
+    <!-- 1. Patitas inferiores -->
     <g class="semillita-feet" stroke="#1E5641" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round" fill="none">
       <path d="M 50 128 L 57 137 L 64 128" />
       <path d="M 74 128 L 81 137 L 88 128" />
     </g>
 
-    <!-- Hoja superior inclinada a la izquierda -->
+    <!-- 2. Hoja superior inclinada a la izquierda -->
     <g class="semillita-leaf">
-      <!-- Cuerpo de la hoja -->
       <path d="M 52 42 C 40 28, 26 12, 42 2 C 58 10, 68 24, 56 43 Z"
             fill="url(#leafGrad)"
             stroke="#1E5641"
             stroke-width="3.8"
             stroke-linejoin="round" />
-      <!-- Nervadura central de la hoja -->
       <path d="M 44 26 C 47 18, 45 10, 42 4"
             fill="none"
             stroke="#1E5641"
             stroke-width="2.2"
             stroke-linecap="round" />
-      <!-- Nervadura lateral sutil -->
       <path d="M 45 19 C 50 17, 54 18, 56 20"
             fill="none"
             stroke="#1E5641"
@@ -132,17 +128,16 @@
             stroke-linecap="round" />
     </g>
 
-    <!-- Tallo de union con la cabeza -->
+    <!-- Tallo de union -->
     <path d="M 52 38 Q 54 44 56 48"
           fill="none"
           stroke="#1E5641"
           stroke-width="4"
           stroke-linecap="round" />
 
-    <!-- Sombra suave inferior de la cabeza -->
+    <!-- 3. Cuerpo / cabeza organica (primero en el apilamiento) -->
     <ellipse cx="69" cy="120" rx="36" ry="10" fill="url(#shadowGrad)" />
 
-    <!-- Cabeza redondeada organica tipo semilla/gota suave -->
     <path d="M 70 42
              C 98 42, 114 62, 114 88
              C 114 114, 96 126, 70 126
@@ -153,7 +148,6 @@
           stroke-width="4.5"
           stroke-linejoin="round" />
 
-    <!-- Volumen interior / sombra sutil derecha -->
     <path d="M 88 48
              C 106 62, 110 82, 108 100
              C 106 114, 94 122, 78 124
@@ -162,40 +156,32 @@
           fill="#3E9E60"
           opacity="0.38" />
 
-    <!-- Brillo superior izquierdo en la cabeza -->
     <ellipse cx="48" cy="58" rx="10" ry="6"
              transform="rotate(-25 48 58)"
              fill="#FFFFFF"
              opacity="0.45" />
 
-    <!-- Mejillas sonrosadas con dorado calido de la Sierra -->
-    <ellipse cx="40" cy="95" rx="7.5" ry="4.5" fill="#ECA646" opacity="0.4" />
-    <ellipse cx="98" cy="95" rx="7.5" ry="4.5" fill="#ECA646" opacity="0.4" />
+    <ellipse cx="40" cy="95" rx="7.5" ry="4.5" fill="#ECA646" opacity="0.45" />
+    <ellipse cx="98" cy="95" rx="7.5" ry="4.5" fill="#ECA646" opacity="0.45" />
 
-    <!-- Ojos Ovalados Expresivos -->
-    <!-- Ojo Izquierdo -->
-    <g class="semillita-eye eye-normal" id="semEyeLeft">
+    <!-- 4. Rostro encima del cuerpo (ojos y boca siempre visibles) -->
+    <g class="semillita-eye eye-normal">
       <ellipse cx="50" cy="84" rx="5.5" ry="8" fill="#16463E" />
-      <!-- Brillo en la pupila -->
       <circle cx="52" cy="80.5" r="2.2" fill="#FFFFFF" />
       <circle cx="48.5" cy="86" r="1" fill="#FFFFFF" opacity="0.8" />
     </g>
 
-    <!-- Ojo Derecho -->
-    <g class="semillita-eye eye-normal" id="semEyeRight">
+    <g class="semillita-eye eye-normal">
       <ellipse cx="88" cy="84" rx="5.5" ry="8" fill="#16463E" />
-      <!-- Brillo en la pupila -->
       <circle cx="90" cy="80.5" r="2.2" fill="#FFFFFF" />
       <circle cx="86.5" cy="86" r="1" fill="#FFFFFF" opacity="0.8" />
     </g>
 
-    <!-- Ojos felices alternativos (ocultos por defecto, visibles con .semillita--happy) -->
     <g class="eye-happy" style="display: none;" stroke="#16463E" stroke-width="3.5" stroke-linecap="round" fill="none">
       <path d="M 44 86 Q 50 78 56 86" />
       <path d="M 82 86 Q 88 78 94 86" />
     </g>
 
-    <!-- Boca sonriente amigable habitual -->
     <path class="mouth-normal"
           d="M 62 97 Q 69 104 76 97"
           fill="none"
@@ -203,7 +189,6 @@
           stroke-width="3.2"
           stroke-linecap="round" />
 
-    <!-- Boca abierta muy feliz para celebraciones -->
     <path class="mouth-happy"
           style="display: none;"
           d="M 60 96 Q 69 108 78 96 Z"
@@ -212,7 +197,6 @@
           stroke-width="3"
           stroke-linejoin="round" />
 
-    <!-- Destellos dorados sutiles para momentos especiales (ocultos por defecto) -->
     <g class="semillita-sparkles" style="display: none;">
       <path d="M 18 55 L 21 61 L 27 64 L 21 67 L 18 73 L 15 67 L 9 64 L 15 61 Z" fill="url(#goldAccentGrad)" />
       <path d="M 120 45 L 122 49 L 126 51 L 122 53 L 120 57 L 118 53 L 114 51 L 118 49 Z" fill="url(#goldAccentGrad)" />

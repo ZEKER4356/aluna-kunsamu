@@ -381,16 +381,18 @@ a {
   overflow: visible;
   display: block;
 }
+.semillita-body,
 .semillita-bob {
   animation: semBob 3s ease-in-out infinite;
-  transform-origin: 70px 115px;
+  transform-origin: center bottom;
 }
 .semillita-eye {
+  transform-box: fill-box;
   transform-origin: center;
   animation: semBlink 4.5s ease-in-out infinite;
 }
 .semillita-leaf {
-  transform-origin: 52px 35px;
+  transform-origin: 52px 38px;
   animation: semLeafSway 3.6s ease-in-out infinite;
 }
 
@@ -407,6 +409,7 @@ a {
   50% { transform: rotate(5deg); }
 }
 
+.semillita--happy .semillita-body,
 .semillita--happy .semillita-bob {
   animation: semHappyJump 0.6s ease-in-out 3;
 }
@@ -425,13 +428,17 @@ a {
 .semillita--happy .mouth-happy {
   display: block !important;
 }
+.semillita--happy .semillita-sparkles {
+  display: block !important;
+}
 
 @keyframes semHappyJump {
   0%, 100% { transform: translateY(0) scale(1); }
-  40% { transform: translateY(-16px) scale(1.06, 0.94); }
-  70% { transform: translateY(2px) scale(0.96, 1.04); }
+  40% { transform: translateY(-14px) scale(1.05, 0.95); }
+  70% { transform: translateY(2px) scale(0.97, 1.03); }
 }
 
+.semillita--thinking .semillita-body,
 .semillita--thinking .semillita-bob {
   animation: semThinkTilt 2.2s ease-in-out infinite;
 }
@@ -440,7 +447,7 @@ a {
 }
 @keyframes semThinkTilt {
   0%, 100% { transform: rotate(0deg) translateY(0); }
-  50% { transform: rotate(6deg) translateY(-4px); }
+  50% { transform: rotate(5deg) translateY(-4px); }
 }
 @keyframes semThinkLeaf {
   0%, 100% { transform: rotate(8deg); }
@@ -832,7 +839,7 @@ a {
 }
 
 /* ==========================================================================
-   VISTA 2: RUTA EN TEJIDO GEOMETRICO EN ZIGZAG (PISOS DEL SABER)
+   VISTA 2: RUTA EN PAISAJE VERTICAL CONTINUO (6 PISOS CONECTADOS)
    ========================================================================== */
 .route-header {
   margin-bottom: 24px;
@@ -849,7 +856,66 @@ a {
   font-size: 0.95rem;
 }
 
-/* Contenedor de Piso Territorial */
+/* Lienzo vertical continuo sin cortes entre pisos */
+.route-continuous-canvas {
+  border-radius: var(--radius-lg);
+  border: 1.5px solid var(--border-medium);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.piso-section {
+  position: relative;
+  padding: 32px 26px 26px;
+  overflow: hidden;
+}
+
+/* Degradados continuos por piso termico (el final de uno es el inicio del siguiente) */
+.piso-stage-1 { background: linear-gradient(180deg, #E6F4F1 0%, #D9EFE6 100%); }
+.piso-stage-2 { background: linear-gradient(180deg, #D9EFE6 0%, #CBE7D3 100%); }
+.piso-stage-3 { background: linear-gradient(180deg, #CBE7D3 0%, #DCE9E2 100%); }
+.piso-stage-4 { background: linear-gradient(180deg, #DCE9E2 0%, #EAE3D2 100%); }
+.piso-stage-5 { background: linear-gradient(180deg, #EAE3D2 0%, #DCE8F2 100%); }
+.piso-stage-6 { background: linear-gradient(180deg, #DCE8F2 0%, #F4F8FB 100%); }
+
+.stage-bg-silhouette {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.13;
+  pointer-events: none !important;
+  z-index: 1;
+}
+
+.piso-header-seamless {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 4;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.piso-full-title {
+  font-size: 1.28rem;
+  font-weight: 800;
+  color: var(--primary-deep);
+}
+
+.piso-ecosystem-tag {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--accent-earth);
+  display: block;
+}
+
+/* Contenedor de tarjeta generica (para Taller, etc.) */
 .piso-container {
   background: var(--bg-card);
   border: 1.5px solid var(--border-light);
@@ -858,17 +924,6 @@ a {
   margin-bottom: 28px;
   box-shadow: var(--shadow-sm);
   position: relative;
-}
-
-.piso-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-bottom: 18px;
-  border-bottom: 1px solid var(--border-light);
-  margin-bottom: 24px;
-  flex-wrap: wrap;
-  gap: 12px;
 }
 
 .piso-title-wrap {
@@ -881,44 +936,34 @@ a {
   width: 48px;
   height: 48px;
   border-radius: var(--radius-md);
-  background: var(--primary-soft);
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid var(--border-medium);
   color: var(--primary-forest);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-}
-
-.piso-title-wrap h3 {
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: var(--text-main);
-}
-
-.piso-ecosystem {
-  font-size: 0.82rem;
-  color: var(--accent-earth);
-  font-weight: 700;
-  display: block;
+  box-shadow: var(--shadow-sm);
 }
 
 .piso-progress-pill {
   font-size: 0.8rem;
   font-weight: 700;
   color: var(--primary-forest);
-  background: var(--primary-soft);
-  padding: 5px 12px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--border-medium);
+  padding: 6px 14px;
   border-radius: var(--radius-full);
 }
 
-/* Tejido Geométrico en Zigzag: SVG de fondo + Grid de Nodos */
+/* Tejido Geometrico en Zigzag: SVG de fondo + Grid de Nodos */
 .zigzag-loom-area {
   position: relative;
-  min-height: 220px;
+  min-height: 210px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px 10px;
+  padding: 18px 10px 28px;
 }
 
 .zigzag-svg-threads {
@@ -927,12 +972,12 @@ a {
   left: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none;
+  pointer-events: none !important;
   z-index: 1;
 }
 
 .thread-line {
-  stroke: #D0DEC4;
+  stroke: #B9CEBE;
   stroke-width: 4px;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -945,12 +990,12 @@ a {
   stroke: var(--accent-ochre);
   stroke-width: 5px;
   stroke-dasharray: none;
-  filter: drop-shadow(0 2px 4px rgba(217, 155, 56, 0.4));
+  filter: drop-shadow(0 2px 4px rgba(217, 155, 56, 0.45));
 }
 
 .zigzag-nodes-grid {
   position: relative;
-  z-index: 2;
+  z-index: 6;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
@@ -963,6 +1008,8 @@ a {
   flex-direction: column;
   align-items: center;
   text-align: center;
+  position: relative;
+  z-index: 8;
 }
 
 /* Alternancia en Zigzag visual */
@@ -974,6 +1021,10 @@ a {
 }
 
 .level-diamond-btn {
+  position: relative;
+  z-index: 10;
+  cursor: pointer;
+  pointer-events: auto;
   width: 68px;
   height: 68px;
   border-radius: 18px;
@@ -985,7 +1036,7 @@ a {
   border: 2.5px solid var(--border-medium);
   box-shadow: 0 4px 0 var(--border-medium);
   transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1);
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .diamond-inner-content {
@@ -994,15 +1045,22 @@ a {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  pointer-events: none;
 }
 
-.level-diamond-btn:hover:not(:disabled) {
+.diamond-level-num {
+  font-size: 0.68rem;
+  font-weight: 800;
+  margin-top: 2px;
+}
+
+.level-diamond-btn:hover {
   transform: rotate(45deg) translateY(-2px);
   box-shadow: 0 6px 0 var(--border-shadow);
   border-color: var(--primary-leaf);
 }
 
-.level-diamond-btn:active:not(:disabled) {
+.level-diamond-btn:active {
   transform: rotate(45deg) translateY(2px);
   box-shadow: 0 1px 0 var(--border-shadow);
 }
@@ -1024,12 +1082,12 @@ a {
 }
 
 .level-diamond-btn.locked {
-  background: #E8ECE8;
-  border-color: #D3DDD3;
-  box-shadow: 0 2px 0 #CBD5CB;
-  color: #92A398;
-  cursor: not-allowed;
-  opacity: 0.75;
+  background: rgba(232, 236, 232, 0.92);
+  border-color: #C7D3C9;
+  box-shadow: 0 3px 0 #BCC9BE;
+  color: #7D9084;
+  cursor: pointer;
+  opacity: 0.88;
 }
 
 @keyframes pulseCurrentNode {
@@ -1041,8 +1099,69 @@ a {
   font-size: 0.78rem;
   font-weight: 700;
   color: var(--text-main);
-  max-width: 110px;
+  max-width: 120px;
   line-height: 1.25;
+  background: rgba(255, 255, 255, 0.72);
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+/* Conector Puente SVG entre Pisos Consecutivos */
+.piso-bridge-connector {
+  position: relative;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.piso-bridge-connector[data-bridge="1-2"] { background: #D9EFE6; }
+.piso-bridge-connector[data-bridge="2-3"] { background: #CBE7D3; }
+.piso-bridge-connector[data-bridge="3-4"] { background: #DCE9E2; }
+.piso-bridge-connector[data-bridge="4-5"] { background: #EAE3D2; }
+.piso-bridge-connector[data-bridge="5-6"] { background: #DCE8F2; }
+
+.bridge-thread-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none !important;
+  z-index: 1;
+}
+
+.thread-bridge-line {
+  stroke: #B9CEBE;
+  stroke-width: 4px;
+  stroke-linecap: round;
+  fill: none;
+  stroke-dasharray: 6 6;
+  transition: all 0.4s ease;
+}
+
+.thread-bridge-line.active {
+  stroke: var(--accent-ochre);
+  stroke-width: 5px;
+  stroke-dasharray: none;
+  filter: drop-shadow(0 2px 5px rgba(217, 155, 56, 0.5));
+}
+
+.altitude-divider-pill {
+  position: relative;
+  z-index: 3;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(4px);
+  border: 1.5px solid var(--border-medium);
+  padding: 5px 16px;
+  border-radius: var(--radius-full);
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--primary-forest);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
 }
 
 /* ==========================================================================
@@ -1617,6 +1736,209 @@ a {
   line-height: 1.45;
 }
 
+/* ==========================================================================
+   VISTA MISIONES EN EL TERRITORIO & ALBUM DE INSIGNIAS
+   ========================================================================== */
+.missions-progress-banner,
+.album-progress-banner {
+  background: linear-gradient(135deg, #FFFFFF 0%, var(--primary-soft) 100%);
+  border: 1.5px solid var(--border-medium);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.banner-progress-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.banner-progress-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--primary-forest);
+}
+
+.banner-progress-points {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--accent-ochre-dark);
+  background: var(--accent-ochre-light);
+  border: 1px solid #F1D49F;
+  padding: 5px 14px;
+  border-radius: var(--radius-full);
+}
+
+.progress-bar-track {
+  width: 100%;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-leaf) 0%, var(--accent-ochre) 100%);
+  border-radius: var(--radius-full);
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.missions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 18px;
+}
+
+.mission-card {
+  background: #FFFFFF;
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 22px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 14px;
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+
+.mission-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.mission-card.completed {
+  border-color: var(--status-success);
+  background: linear-gradient(180deg, #FFFFFF 0%, #F4FBF6 100%);
+}
+
+.mission-tag-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.mission-badge-tag {
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--primary-forest);
+  background: var(--primary-soft);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+}
+
+.mission-done-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: var(--status-success);
+  background: var(--status-success-bg);
+  border: 1px solid #B7E2C5;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+}
+
+.mission-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mission-icon-box {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-md);
+  background: var(--bg-canvas);
+  border: 1px solid var(--border-medium);
+  color: var(--primary-forest);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mission-card.completed .mission-icon-box {
+  background: var(--primary-forest);
+  color: #FFFFFF;
+}
+
+.mission-reflection-box {
+  background: var(--bg-canvas);
+  border-left: 3.5px solid var(--accent-ochre);
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.84rem;
+  color: var(--text-main);
+}
+
+/* Tarjetas interactivas del Album */
+.badge-card {
+  cursor: pointer;
+  transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+  position: relative;
+}
+
+.badge-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary-leaf);
+}
+
+.badge-card.locked {
+  opacity: 0.78;
+  background: #FAFBF9;
+}
+
+.badge-lock-corner {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  color: #8A9D91;
+}
+
+.profile-stats-mini-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.profile-mini-stat {
+  background: #FFFFFF;
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.profile-mini-stat strong {
+  display: block;
+  font-size: 1.45rem;
+  font-weight: 900;
+  color: var(--primary-forest);
+}
+
+.profile-mini-stat span {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
 /* Canvas de Celebración */
 #celebrationCanvas {
   position: fixed;
@@ -1697,5 +2019,17 @@ a {
 
   .contrast-split-grid {
     grid-template-columns: 1fr;
+  }
+
+  .bottom-nav-list {
+    overflow-x: auto;
+    justify-content: flex-start;
+    gap: 2px;
+    padding: 0 6px;
+  }
+
+  .bottom-nav-btn {
+    min-width: 64px;
+    font-size: 0.68rem;
   }
 }

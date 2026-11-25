@@ -135,17 +135,20 @@
 
   <div class="app-container">
 
-    <!-- 1. BARRA LATERAL (DESKTOP) CON EXACTAMENTE 5 SECCIONES -->
+    <!-- 1. BARRA LATERAL (DESKTOP) CON SECCIONES PRINCIPALES -->
     <aside class="sidebar" aria-label="Navegacion principal">
       <div class="sidebar-brand">
         <div class="brand-icon-wrap">
           <svg viewBox="0 0 140 150" width="36" height="36" class="semillita-svg" role="img" aria-label="Semillita">
-            <g class="semillita-bob">
+            <g class="semillita-body">
               <g stroke="#1E5641" stroke-width="4.2" stroke-linecap="round" fill="none">
                 <path d="M 50 128 L 57 137 L 64 128" />
                 <path d="M 74 128 L 81 137 L 88 128" />
               </g>
-              <path d="M 52 42 C 40 28, 26 12, 42 2 C 58 10, 68 24, 56 43 Z" fill="#59B96B" stroke="#1E5641" stroke-width="3.8" />
+              <g class="semillita-leaf">
+                <path d="M 52 42 C 40 28, 26 12, 42 2 C 58 10, 68 24, 56 43 Z" fill="#59B96B" stroke="#1E5641" stroke-width="3.8" />
+              </g>
+              <path d="M 52 38 Q 54 44 56 48" fill="none" stroke="#1E5641" stroke-width="4" stroke-linecap="round" />
               <path d="M 70 42 C 98 42, 114 62, 114 88 C 114 114, 96 126, 70 126 C 44 126, 26 114, 26 88 C 26 62, 42 42, 70 42 Z" fill="#96E5A8" stroke="#1E5641" stroke-width="4.5" />
               <ellipse cx="40" cy="95" rx="7.5" ry="4.5" fill="#ECA646" opacity="0.5" />
               <ellipse cx="98" cy="95" rx="7.5" ry="4.5" fill="#ECA646" opacity="0.5" />
@@ -157,7 +160,12 @@
                 <ellipse cx="88" cy="84" rx="5.5" ry="8" fill="#16463E" />
                 <circle cx="90" cy="80.5" r="2.2" fill="#FFFFFF" />
               </g>
+              <g class="eye-happy" style="display: none;" stroke="#16463E" stroke-width="3.5" stroke-linecap="round" fill="none">
+                <path d="M 44 86 Q 50 78 56 86" />
+                <path d="M 82 86 Q 88 78 94 86" />
+              </g>
               <path class="mouth-normal" d="M 62 97 Q 69 104 76 97" fill="none" stroke="#16463E" stroke-width="3.2" stroke-linecap="round" />
+              <path class="mouth-happy" style="display: none;" d="M 60 96 Q 69 108 78 96 Z" fill="#D9665B" stroke="#16463E" stroke-width="3" stroke-linejoin="round" />
             </g>
           </svg>
         </div>
@@ -180,13 +188,21 @@
           <span class="nav-icon" id="navIcon-juegos"></span>
           <span>Juegos y Saberes</span>
         </button>
+        <button class="nav-item-btn" data-view="misiones" id="navBtn-misiones">
+          <span class="nav-icon" id="navIcon-misiones"></span>
+          <span>Misiones</span>
+        </button>
         <button class="nav-item-btn" data-view="diccionario" id="navBtn-diccionario">
           <span class="nav-icon" id="navIcon-diccionario"></span>
           <span>Diccionario</span>
         </button>
+        <button class="nav-item-btn" data-view="album" id="navBtn-album">
+          <span class="nav-icon" id="navIcon-album"></span>
+          <span>Album</span>
+        </button>
         <button class="nav-item-btn" data-view="perfil" id="navBtn-perfil">
           <span class="nav-icon" id="navIcon-perfil"></span>
-          <span>Album y Perfil</span>
+          <span>Perfil</span>
         </button>
       </nav>
 
@@ -194,12 +210,15 @@
         <div class="sidebar-mascot-card">
           <div class="sidebar-mascot-img">
             <svg viewBox="0 0 140 150" width="36" height="42" class="semillita-svg" role="img" aria-label="Semillita Guia">
-              <g class="semillita-bob">
+              <g class="semillita-body">
                 <g stroke="#1E5641" stroke-width="4.2" stroke-linecap="round" fill="none">
                   <path d="M 50 128 L 57 137 L 64 128" />
                   <path d="M 74 128 L 81 137 L 88 128" />
                 </g>
-                <path d="M 52 42 C 40 28, 26 12, 42 2 C 58 10, 68 24, 56 43 Z" fill="#59B96B" stroke="#1E5641" stroke-width="3.8" />
+                <g class="semillita-leaf">
+                  <path d="M 52 42 C 40 28, 26 12, 42 2 C 58 10, 68 24, 56 43 Z" fill="#59B96B" stroke="#1E5641" stroke-width="3.8" />
+                </g>
+                <path d="M 52 38 Q 54 44 56 48" fill="none" stroke="#1E5641" stroke-width="4" stroke-linecap="round" />
                 <path d="M 70 42 C 98 42, 114 62, 114 88 C 114 114, 96 126, 70 126 C 44 126, 26 114, 26 88 C 26 62, 42 42, 70 42 Z" fill="#96E5A8" stroke="#1E5641" stroke-width="4.5" />
                 <ellipse cx="40" cy="95" rx="7.5" ry="4.5" fill="#ECA646" opacity="0.5" />
                 <ellipse cx="98" cy="95" rx="7.5" ry="4.5" fill="#ECA646" opacity="0.5" />
@@ -211,7 +230,12 @@
                   <ellipse cx="88" cy="84" rx="5.5" ry="8" fill="#16463E" />
                   <circle cx="90" cy="80.5" r="2.2" fill="#FFFFFF" />
                 </g>
+                <g class="eye-happy" style="display: none;" stroke="#16463E" stroke-width="3.5" stroke-linecap="round" fill="none">
+                  <path d="M 44 86 Q 50 78 56 86" />
+                  <path d="M 82 86 Q 88 78 94 86" />
+                </g>
                 <path class="mouth-normal" d="M 62 97 Q 69 104 76 97" fill="none" stroke="#16463E" stroke-width="3.2" stroke-linecap="round" />
+                <path class="mouth-happy" style="display: none;" d="M 60 96 Q 69 108 78 96 Z" fill="#D9665B" stroke="#16463E" stroke-width="3" stroke-linejoin="round" />
               </g>
             </svg>
           </div>
@@ -241,8 +265,10 @@
           <button class="topbar-mascot-pill" id="btnTopbarMascot" aria-label="Semillita, guia interactiva">
             <span class="topbar-mascot-icon">
               <svg viewBox="0 0 140 150" width="24" height="24" class="semillita-svg" role="img" aria-hidden="true">
-                <g class="semillita-bob">
-                  <path d="M 52 42 C 40 28, 26 12, 42 2 C 58 10, 68 24, 56 43 Z" fill="#59B96B" stroke="#1E5641" stroke-width="4" />
+                <g class="semillita-body">
+                  <g class="semillita-leaf">
+                    <path d="M 52 42 C 40 28, 26 12, 42 2 C 58 10, 68 24, 56 43 Z" fill="#59B96B" stroke="#1E5641" stroke-width="4" />
+                  </g>
                   <path d="M 70 42 C 98 42, 114 62, 114 88 C 114 114, 96 126, 70 126 C 44 126, 26 114, 26 88 C 26 62, 42 42, 70 42 Z" fill="#96E5A8" stroke="#1E5641" stroke-width="5" />
                   <ellipse cx="40" cy="95" rx="7.5" ry="4.5" fill="#ECA646" opacity="0.6" />
                   <ellipse cx="98" cy="95" rx="7.5" ry="4.5" fill="#ECA646" opacity="0.6" />
@@ -254,7 +280,12 @@
                     <ellipse cx="88" cy="84" rx="6" ry="8.5" fill="#16463E" />
                     <circle cx="90" cy="80.5" r="2.5" fill="#FFFFFF" />
                   </g>
+                  <g class="eye-happy" style="display: none;" stroke="#16463E" stroke-width="4" stroke-linecap="round" fill="none">
+                    <path d="M 44 86 Q 50 78 56 86" />
+                    <path d="M 82 86 Q 88 78 94 86" />
+                  </g>
                   <path class="mouth-normal" d="M 62 97 Q 69 104 76 97" fill="none" stroke="#16463E" stroke-width="3.5" stroke-linecap="round" />
+                  <path class="mouth-happy" style="display: none;" d="M 60 96 Q 69 108 78 96 Z" fill="#D9665B" stroke="#16463E" stroke-width="3" stroke-linejoin="round" />
                 </g>
               </svg>
             </span>
@@ -330,7 +361,7 @@
                         <stop offset="100%" stop-color="#5EBE78"/>
                       </linearGradient>
                     </defs>
-                    <g class="semillita-bob">
+                    <g class="semillita-body">
                       <g class="semillita-feet" stroke="#1E5641" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round" fill="none">
                         <path d="M 50 128 L 57 137 L 64 128" />
                         <path d="M 74 128 L 81 137 L 88 128" />
@@ -380,7 +411,7 @@
             <div class="stat-summary-card">
               <div class="stat-icon-badge gold" id="statBadgeBadges"></div>
               <div>
-                <div class="stat-number" id="homeCompletedBadges">0 / 6</div>
+                <div class="stat-number" id="homeCompletedBadges">0 / 10</div>
                 <div class="stat-label">Insignias del Album</div>
               </div>
             </div>
@@ -410,7 +441,7 @@
                     <stop offset="100%" stop-color="#5EBE78"/>
                   </linearGradient>
                 </defs>
-                <g class="semillita-bob">
+                <g class="semillita-body">
                   <g stroke="#1E5641" stroke-width="4.2" stroke-linecap="round" fill="none">
                     <path d="M 50 128 L 57 137 L 64 128" />
                     <path d="M 74 128 L 81 137 L 88 128" />
@@ -430,7 +461,12 @@
                     <ellipse cx="88" cy="84" rx="5.5" ry="8" fill="#16463E" />
                     <circle cx="90" cy="80.5" r="2.2" fill="#FFFFFF" />
                   </g>
+                  <g class="eye-happy" style="display: none;" stroke="#16463E" stroke-width="3.5" stroke-linecap="round" fill="none">
+                    <path d="M 44 86 Q 50 78 56 86" />
+                    <path d="M 82 86 Q 88 78 94 86" />
+                  </g>
                   <path class="mouth-normal" d="M 62 97 Q 69 104 76 97" fill="none" stroke="#16463E" stroke-width="3.2" stroke-linecap="round" />
+                  <path class="mouth-happy" style="display: none;" d="M 60 96 Q 69 108 78 96 Z" fill="#D9665B" stroke="#16463E" stroke-width="3" stroke-linejoin="round" />
                 </g>
               </svg>
             </div>
@@ -502,6 +538,31 @@
         </section>
 
         <!-- ================================================================
+             4. VISTA: MISIONES EN EL TERRITORIO
+             ================================================================ -->
+        <section class="app-view" id="viewMisiones">
+          <div class="route-header">
+            <span class="hero-tag" style="background: var(--primary-soft); color: var(--primary-forest);">
+              Accion Consciente y Cuidado Territorial
+            </span>
+            <h2>Misiones en el territorio</h2>
+            <p>Practicas cotidianas de observacion ambiental, respeto al agua y dialogo intercultural conectadas con tu progreso.</p>
+          </div>
+
+          <div class="missions-progress-banner" id="missionsProgressBanner">
+            <div class="banner-progress-top">
+              <span class="banner-progress-title" id="missionsProgressSummary">0 de 6 misiones completadas</span>
+              <span class="banner-progress-points" id="missionsPointsSummary">+0 pts ganados</span>
+            </div>
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill" id="missionsProgressFill" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <div class="missions-grid" id="missionsGridContainer"></div>
+        </section>
+
+        <!-- ================================================================
              4. VISTA: DICCIONARIO BILINGUE Y CONTRASTE DE SABERES
              ================================================================ -->
         <section class="app-view" id="viewDiccionario">
@@ -540,7 +601,32 @@
         </section>
 
         <!-- ================================================================
-             5. VISTA: ALBUM Y PERFIL (INSIGNIAS, TALLER Y HABEAS DATA)
+             6. VISTA: ALBUM DE INSIGNIAS TERRITORIALES
+             ================================================================ -->
+        <section class="app-view" id="viewAlbum">
+          <div class="route-header">
+            <span class="hero-tag" style="background: var(--accent-ochre-light); color: var(--accent-ochre-dark);">
+              Coleccion Intercultural
+            </span>
+            <h2>Album de Insignias</h2>
+            <p>Toca cualquier insignia para conocer su significado cultural y el requisito exacto para desbloquearla.</p>
+          </div>
+
+          <div class="album-progress-banner" id="albumProgressBanner">
+            <div class="banner-progress-top">
+              <span class="banner-progress-title" id="albumProgressSummary">0 / 10 insignias conseguidas</span>
+              <span class="banner-progress-points" id="albumProgressPercent">0% completado</span>
+            </div>
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill" id="albumProgressFill" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <div class="badges-gallery-grid" id="badgesGalleryContainer"></div>
+        </section>
+
+        <!-- ================================================================
+             7. VISTA: PERFIL Y GOBERNANZA (ROL, TALLER Y HABEAS DATA)
              ================================================================ -->
         <section class="app-view" id="viewPerfil">
           <!-- Tarjeta de Perfil Activo -->
@@ -565,15 +651,24 @@
             </div>
           </div>
 
-          <!-- Album de Insignias Territoriales -->
-          <div style="margin-bottom: 24px;">
-            <h3 style="font-size: 1.35rem; font-weight: 800; color: var(--primary-forest); margin-bottom: 6px;">
-              Album de Insignias Territoriales
-            </h3>
-            <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 16px;">
-              Medallas desbloqueadas al culminar los pisos de la Sierra Nevada.
-            </p>
-            <div class="badges-gallery-grid" id="badgesGalleryContainer"></div>
+          <!-- Resumen Estadistico del Estudiante -->
+          <div class="profile-stats-mini-grid">
+            <div class="profile-mini-stat">
+              <strong id="profStatPoints">0</strong>
+              <span>Puntos Totales</span>
+            </div>
+            <div class="profile-mini-stat">
+              <strong id="profStatLevels">0 / 24</strong>
+              <span>Niveles Tejidos</span>
+            </div>
+            <div class="profile-mini-stat">
+              <strong id="profStatMissions">0 / 6</strong>
+              <span>Misiones Realizadas</span>
+            </div>
+            <div class="profile-mini-stat">
+              <strong id="profStatBadges">0 / 10</strong>
+              <span>Insignias Ganadas</span>
+            </div>
           </div>
 
           <!-- Taller Comunitario (Grabacion de Vocablos Locales) -->
@@ -661,7 +756,7 @@
 
       </main>
 
-      <!-- 2. BARRA DE NAVEGACION INFERIOR (MOVIL) CON LAS MISMAS 5 SECCIONES -->
+      <!-- 2. BARRA DE NAVEGACION INFERIOR (MOVIL) -->
       <nav class="bottom-nav" aria-label="Navegacion movil">
         <ul class="bottom-nav-list">
           <li>
@@ -683,9 +778,21 @@
             </button>
           </li>
           <li>
+            <button class="bottom-nav-btn" data-view="misiones" id="mobBtn-misiones">
+              <span class="nav-icon" id="mobIcon-misiones"></span>
+              <span>Misiones</span>
+            </button>
+          </li>
+          <li>
             <button class="bottom-nav-btn" data-view="diccionario" id="mobBtn-diccionario">
               <span class="nav-icon" id="mobIcon-diccionario"></span>
               <span>Diccionario</span>
+            </button>
+          </li>
+          <li>
+            <button class="bottom-nav-btn" data-view="album" id="mobBtn-album">
+              <span class="nav-icon" id="mobIcon-album"></span>
+              <span>Album</span>
             </button>
           </li>
           <li>

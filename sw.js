@@ -9,7 +9,7 @@
  * ============================================================================
  */
 
-const CACHE_NAME = 'kunsamu-v7';
+const CACHE_NAME = 'kunsamu-v8';
 
 const STATIC_ASSETS = [
   './',

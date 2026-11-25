@@ -27,6 +27,8 @@ const DEFAULT_STATE = {
   completedLevels: [], // IDs de niveles completados (ej. '1-1', '1-2')
   completedMissions: [], // IDs de misiones realizadas
   completedBadges: [], // IDs de insignias desbloqueadas
+  completedGames: 0, // Minijuegos ganados
+  exploredDictionary: false, // Si exploro el diccionario
   unlockedStage: 1, // Piso activo (1 a 6)
   customWords: [], // Palabras aportadas desde el Taller Comunitario
   reflections: {}, // Notas y reflexiones personales
